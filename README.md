@@ -2,13 +2,18 @@
 
 以五個欄位練習組合清楚、可執行的 AI 提示詞，並可直接部署至 Cloudflare Pages。
 
+正式站：[https://ai-prompt-exercise.pages.dev](https://ai-prompt-exercise.pages.dev)
+
 ## 功能
 
+- 開始練習：首頁主要按鈕直接移動到提示詞工作區。
+- 三組範例：研究比較、功能開發與內容企劃，可一次帶入完整五欄內容。
 - 卡片式：一次檢視並填寫所有欄位。
-- 精靈式：依序完成五個引導步驟。
+- 精靈式：預設輸入模式，依序完成五個引導步驟。
 - 模式切換：兩種模式共用輸入內容，切換時不遺失資料。
 - 固定格式：依 Context、Request、Output Format、Constraints、Checkpoint 組合提示詞。
 - 一鍵複製：將產生結果複製到剪貼簿。
+- 方法說明：整理任務邊界、Checkpoint 與驗證注意事項，並附官方來源。
 - 本機處理：不使用後端、API 或資料庫，輸入內容不會離開瀏覽器。
 
 ## 輸出格式

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildPrompt, FIELD_DEFINITIONS } from "../public/app.js";
+import { buildPrompt, FIELD_DEFINITIONS, PROMPT_EXAMPLES } from "../public/app.js";
 
 test("提示詞包含五個固定欄位", () => {
   assert.deepEqual(
@@ -46,4 +46,13 @@ test("只移除各欄位前後空白，保留內部換行", () => {
 
   assert.match(result, /^第一行\n第二行\n任務/);
   assert.match(result, /查核條件：\n查核$/);
+});
+
+test("三個範例都提供完整五欄內容", () => {
+  assert.equal(Object.keys(PROMPT_EXAMPLES).length, 3);
+  for (const example of Object.values(PROMPT_EXAMPLES)) {
+    for (const { key } of FIELD_DEFINITIONS) {
+      assert.ok(example[key].trim(), `${key} 不可為空`);
+    }
+  }
 });

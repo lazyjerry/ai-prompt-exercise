@@ -3,6 +3,113 @@ set -eu
 
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 TASK_DIR="$ROOT_DIR/docs/knowledge-skill/建立提示詞練習頁面-001"
+ENHANCE_TASK_DIR="$ROOT_DIR/docs/knowledge-skill/擴充提示詞頁面內容-001"
+
+write_enhancement_task_files() {
+  cat > "$ENHANCE_TASK_DIR/prompt.md" <<'EOF'
+# 任務請求：擴充提示詞頁面內容
+
+## 原始請求
+
+調整既有 Prompt Forge Cloudflare Pages：
+
+1. 第一個 frame 新增「開始」action button，點擊後往下捲動到第二個 frame。
+2. 第二個 frame 建立 2–3 個範例，並將精靈式設為預設輸入方式。
+3. 第三個 frame 的「04 Why this works」擴寫成較長摘要，納入：
+   - 強模型需要清楚的目標、邊界與驗收標準，而非冗長地教模型如何思考。
+   - Context、Request、Output Format、Constraints、Checkpoint 五部分的用途。
+   - Checkpoint 的三個主要停點：不可逆操作、任務範圍變更、需要使用者提供資訊。
+   - 任務邊界、checkpoint 的重要性與注意事項。
+   - 參考網路上的權威觀點，於相關段落或句子後以偏小字體附上引用連結。
+4. 保留並引用靈感來源：https://x.com/RealCodedAlpha/status/2072937806801105347
+
+參考畫面為本次附上的第一屏與工作區截圖。
+
+## 期望產出
+
+- [ ] 第一屏：有明確「開始」CTA，可移動至工作區
+- [ ] 第二屏：精靈式預設啟用，提供 3 個可套用範例
+- [ ] 第三屏：含任務邊界、checkpoint、注意事項及小字引用的長文
+- [ ] 自動化與瀏覽器驗證：互動、引用、響應式、可及性
+- [ ] GitHub 與 Cloudflare Pages production 更新
+
+**產出類型：**
+- 文件：knowledge-skill 任務紀錄與交付報告
+- 程式碼：`public/index.html`、`public/styles.css`、`public/app.js`、測試
+- 其他：Git commit、GitHub push、Cloudflare Pages deployment
+
+## 參考文件
+
+| 檔案路徑或網址 | 引用範圍描述 |
+|----------|--------------|
+| `public/index.html` | 三個 frame 的語意結構與長文內容 |
+| `public/styles.css` | CTA、範例卡片、引用與長文排版 |
+| `public/app.js` | 預設模式、範例套用與表單狀態 |
+| 使用者附圖 | 第一屏與工作區目前視覺狀態 |
+| `https://x.com/RealCodedAlpha/status/2072937806801105347` | 原始靈感來源 |
+| Anthropic、OpenAI、NIST 官方資料 | 任務邊界、checkpoint、人類監督與驗收觀點 |
+EOF
+
+  cat > "$ENHANCE_TASK_DIR/task_plan.md" <<'EOF'
+# 任務計劃：擴充提示詞頁面內容
+
+## 目標
+完成三個 frame 的內容與互動擴充，以權威來源支撐長文，驗證後推送並重新發布正式站。
+
+## 執行模式
+一次完成
+
+## 報告保存路徑
+`docs/knowledge-skill/擴充提示詞頁面內容-001/`
+
+## 研究動作計畫
+尚未啟用；採用預設「不先確認研究計畫」。
+
+## 階段
+- [ ] 階段 1：研究任務邊界、checkpoint 與人類監督來源
+  - [ ] 完成後更新 notes.md
+- [ ] 階段 2：實作 CTA、範例、預設精靈與 04 長文
+  - [ ] 完成後更新 notes.md
+- [ ] 階段 3：自動化、瀏覽器、響應式與引用驗證
+  - [ ] 完成後更新 notes.md
+- [ ] 階段 4：GitHub 推送與 Cloudflare Pages 重新發布
+  - [ ] 完成後更新 notes.md
+- [ ] 階段 5：完整性檢核與交付
+  - [ ] 完成後更新 notes.md
+
+## 關鍵問題
+1. 哪些官方來源能直接支持清楚目標、任務邊界、驗收標準與 checkpoint？
+2. 如何讓 3 個範例可直接套用，同時不破壞卡片式與精靈式共用 state？
+3. 如何讓長文有足夠篇幅，又維持可掃讀、可及性與手機閱讀品質？
+
+## 已做決策
+- 範例數量採 3 個：符合使用者的 2–3 個範圍，且能涵蓋研究、開發與內容任務。
+- 「開始」採語意化 anchor CTA：無 JavaScript 仍可導向工作區，CSS 提供平滑捲動。
+- 精靈式的 HTML 初始狀態與 JavaScript 初始化都設為預設，避免載入閃動或無 JS 時顯示錯誤模式。
+- 引用只使用原始貼文與官方／第一方技術資料，避免以二手文章支撐核心主張。
+
+## 遇到的錯誤
+- `ui-ux-pro-max/scripts/search.py` 未安裝：沿用已載入的 skill 規範，手動套用可及性、互動、響應式與長文可讀性檢核。
+- `KNOWLEDGE_BASE_DIR` 為字面 `~/.knowledge-skill/knowledge`：依公用知識以 `env -u KNOWLEDGE_BASE_DIR` 初始化，確保寫入預設絕對路徑。
+
+## 狀態
+**目前階段 1** - 查閱並整理權威來源
+EOF
+
+  cat > "$ENHANCE_TASK_DIR/notes.md" <<'EOF'
+# 筆記：擴充提示詞頁面內容
+
+---  2026-07-04  第 1 次更新筆記 ---
+## 任務摘要
+擴充 Prompt Forge 的三個主要 frame。第一屏新增開始 CTA，第二屏預設精靈並提供 3 個可套用範例，第三屏加入有引用的任務邊界與 checkpoint 長文。完成後以自動化測試、正式瀏覽器操作、響應式檢查與 production deployment 驗證。
+
+## 初始觀察
+- 第一屏目前只有標題、說明與特色標籤，缺少移動到工作區的主要動作。
+- 第二屏目前預設卡片式；範例只存在 placeholder，使用者不能一次載入完整五欄。
+- 第四區目前只有一個短標題與一段概述，無法完整說明 Agent 任務邊界與停點。
+- 使用者提供的「疑似 Anthropic 內部」說法尚未獲證實；頁面將描述為社群流傳結構，不當成 Anthropic 已確認內部文件。
+EOF
+}
 
 write_initial_task_files() {
   cat > "$TASK_DIR/prompt.md" <<'EOF'
@@ -230,6 +337,13 @@ EOF
           <span>卡片式</span>
           <span>精靈式</span>
         </div>
+        <div class="hero-actions">
+          <a class="start-button" href="#composer">
+            開始練習
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 19-7-7 1.4-1.4 4.6 4.6V3h2v12.2l4.6-4.6L19 12l-7 7Z"/></svg>
+          </a>
+          <p>從 3 個範例開始，或依序建立自己的提示詞。</p>
+        </div>
       </section>
 
       <section class="workbench" aria-label="提示詞工作區">
@@ -240,18 +354,18 @@ EOF
               <h2>建立你的提示詞</h2>
             </div>
             <div class="mode-switch" role="tablist" aria-label="輸入模式">
-              <button class="mode-tab is-active" id="card-tab" type="button" role="tab" aria-selected="true" aria-controls="card-panel" data-mode="card">
+              <button class="mode-tab" id="card-tab" type="button" role="tab" aria-selected="false" aria-controls="card-panel" tabindex="-1" data-mode="card">
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3Zm2 2v4h4V5H5Zm8-2h8v8h-8V3Zm2 2v4h4V5h-4ZM3 13h8v8H3v-8Zm2 2v4h4v-4H5Zm8-2h8v8h-8v-8Zm2 2v4h4v-4h-4Z"/></svg>
                 卡片式
               </button>
-              <button class="mode-tab" id="wizard-tab" type="button" role="tab" aria-selected="false" aria-controls="wizard-panel" tabindex="-1" data-mode="wizard">
+              <button class="mode-tab is-active" id="wizard-tab" type="button" role="tab" aria-selected="true" aria-controls="wizard-panel" data-mode="wizard">
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h14v3H5V4Zm0 6h9v3H5v-3Zm0 6h14v3H5v-3Zm11-7 4 2.5-4 2.5V9Z"/></svg>
                 精靈式
               </button>
             </div>
           </div>
 
-          <div id="card-panel" role="tabpanel" aria-labelledby="card-tab">
+          <div id="card-panel" role="tabpanel" aria-labelledby="card-tab" hidden>
             <form id="card-form" novalidate>
               <div class="card-grid">
                 <article class="field-card field-card--wide">
@@ -311,7 +425,33 @@ EOF
             </form>
           </div>
 
-          <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab" hidden>
+          <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab">
+            <section class="example-picker" aria-labelledby="example-title">
+              <div class="example-heading">
+                <div>
+                  <p class="wizard-kicker">Quick start / 範例</p>
+                  <h3 id="example-title">先載入一個完整範例</h3>
+                </div>
+                <p>五個欄位會一次帶入，你仍可逐步修改。</p>
+              </div>
+              <div class="example-grid">
+                <button class="example-card" type="button" data-example="research" aria-pressed="false">
+                  <span class="example-number">A</span>
+                  <strong>研究比較</strong>
+                  <span>整理近期資料、比較差異並標記來源</span>
+                </button>
+                <button class="example-card" type="button" data-example="development" aria-pressed="false">
+                  <span class="example-number">B</span>
+                  <strong>功能開發</strong>
+                  <span>限定修改範圍、測試與停下條件</span>
+                </button>
+                <button class="example-card" type="button" data-example="content" aria-pressed="false">
+                  <span class="example-number">C</span>
+                  <strong>內容企劃</strong>
+                  <span>指定受眾、篇幅、語氣與審核節點</span>
+                </button>
+              </div>
+            </section>
             <div class="wizard-progress">
               <p id="wizard-progress-label">步驟 1 / 5</p>
               <div class="progress-track" aria-hidden="true"><span id="wizard-progress-bar"></span></div>
@@ -406,12 +546,118 @@ EOF
         </aside>
       </section>
 
-      <section class="method-note" aria-labelledby="method-title">
-        <p class="eyebrow"><span>04</span> Why this works</p>
-        <div>
-          <h2 id="method-title">好的提示詞，先消除模型需要猜測的地方。</h2>
-          <p>Context 說明原因，Request 鎖定任務，Output Format 定義交付物，Constraints 收好邊界，Checkpoint 留下需要人類判斷的節點。</p>
+      <section class="method-note" id="why-it-works" aria-labelledby="method-title">
+        <div class="method-intro">
+          <p class="eyebrow"><span>04</span> Why this works</p>
+          <p class="method-side-note">不是把 prompt 寫得更長，而是把任務規格寫得更清楚。</p>
         </div>
+
+        <article class="method-article">
+          <header class="method-header">
+            <p class="article-kicker">Agent-era prompting</p>
+            <h2 id="method-title">模型越能自主執行，<br>任務邊界越要清楚。</h2>
+            <p class="method-lead">社群流傳的「Fable 5 Prompt」圖像把提示詞拆成 Context、Request、Output Format、Constraints 與 Checkpoint。這不是已獲 Anthropic 證實的內部格式，但它點出一個實用方向：對 Claude、Codex 或其他能使用工具、跨多步驟工作的 Agent 而言，價值不在堆疊角色設定或教它逐句思考，而在把目標、可用資訊、交付物、邊界與停點說清楚。<small class="source-citation">靈感來源：<a href="https://x.com/RealCodedAlpha/status/2072937806801105347" target="_blank" rel="noopener noreferrer">RealCodedAlpha 原始貼文</a></small></p>
+          </header>
+
+          <section class="article-section" aria-labelledby="five-parts-title">
+            <p class="section-number">01</p>
+            <div>
+              <h3 id="five-parts-title">五個部分是一份最小任務契約</h3>
+              <p>Context 讓模型理解「為誰、在什麼情境、已知什麼」；Request 用清楚動詞定義要完成的工作；Output Format 把結果變成可驗收的交付物；Constraints 指出不能假設、不能更動與不能跨越的界線；Checkpoint 則把必須交回人類判斷的時機寫成明確條件。這五部分的作用不是增加篇幅，而是減少模型必須自行猜測的空間。</p>
+              <div class="part-grid" aria-label="提示詞五部分">
+                <div><strong>Context</strong><span>提供必要背景，不傾倒無關資料。</span></div>
+                <div><strong>Request</strong><span>說清楚要完成什麼，而非只描述主題。</span></div>
+                <div><strong>Output</strong><span>定義格式、篇幅、欄位與驗收方式。</span></div>
+                <div><strong>Constraints</strong><span>界定不可假設、不可更動與禁止事項。</span></div>
+                <div><strong>Checkpoint</strong><span>只保留需要人類裁決的停點。</span></div>
+              </div>
+              <p>OpenAI 的 Agent 指南同樣把 instructions 與 guardrails 視為基礎元件，並指出清楚、結構化的指令能減少歧義；Anthropic 則建議先採用最簡單、可組合的模式，只在任務真的需要時才增加複雜度。<small class="source-citation">參考：<a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">OpenAI · A practical guide to building agents</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="boundary-title">
+            <p class="section-number">02</p>
+            <div>
+              <h3 id="boundary-title">任務邊界決定 Agent 可以自主到哪裡</h3>
+              <p>強模型可以自己規劃步驟、選擇工具、從錯誤中修正並持續執行，但「能決定怎麼做」不等於「可以自行改變要做什麼」。一份好的 prompt 應區分目標與手段：目標、不可跨越的範圍、可使用的資料與驗收標準由人定義；範圍內可逆、低風險的實作細節，才交給 Agent 自主處理。</p>
+              <blockquote>
+                <p>清楚的邊界不是限制模型能力，而是把自主權放在正確的位置。</p>
+              </blockquote>
+              <p>Anthropic 將 Agent 描述為能動態主導流程與工具使用的系統：任務清楚後，它可以獨立規劃與操作，並根據工具結果或程式執行等環境證據判斷進度。NIST AI RMF 也要求明確記錄目標使用範圍、human-AI 角色、監督責任與風險容忍度。<small class="source-citation">參考：<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a>、<a href="https://airc.nist.gov/airmf-resources/airmf/5-sec-core/" target="_blank" rel="noopener noreferrer">NIST · AI RMF Core</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section checkpoint-section" aria-labelledby="checkpoint-title">
+            <p class="section-number">03</p>
+            <div>
+              <h3 id="checkpoint-title">Checkpoint 是停車線，不是每一步的報到</h3>
+              <p>Checkpoint 應該回答：「發生什麼情況時，Agent 必須先停下來取得我的決定？」條件越具體，Agent 越能在安全範圍內持續工作。若只寫「有問題就問我」，模型可能過度中斷；若完全不寫，它又可能在資訊不足或風險升高時自行猜測。</p>
+              <ol class="checkpoint-list">
+                <li>
+                  <span>01</span>
+                  <div><strong>涉及不可逆或高風險操作</strong><p>例如刪除資料、正式發布、付款、改變權限，或任何難以回復且會影響他人的動作。</p></div>
+                </li>
+                <li>
+                  <span>02</span>
+                  <div><strong>任務範圍發生實質變化</strong><p>例如必須新增原本未授權的功能、接觸新的系統，或為了完成工作而改寫原定目標。</p></div>
+                </li>
+                <li>
+                  <span>03</span>
+                  <div><strong>缺少只有使用者能提供的關鍵資訊</strong><p>例如業務規則、憑證、選擇偏好或無法從現有檔案與可用工具查證的決策。</p></div>
+                </li>
+              </ol>
+              <p>OpenAI 建議對敏感、不可逆或高風險行動啟用人類監督，也可在超過重試或失敗門檻時轉交使用者；OpenAI Agents SDK 的 approval flow 則示範了「暫停、保留狀態、取得決定、從原處繼續」的實作方式。Anthropic 也明確指出 Agent 可在 checkpoint 或 blocker 才暫停。<small class="source-citation">參考：<a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">OpenAI · Agent guide</a>、<a href="https://openai.github.io/openai-agents-python/human_in_the_loop/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK · Human-in-the-loop</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="continue-title">
+            <p class="section-number">04</p>
+            <div>
+              <h3 id="continue-title">其他情況，應讓 Agent 繼續完成</h3>
+              <div class="boundary-table">
+                <div>
+                  <p class="boundary-label">可以繼續</p>
+                  <ul>
+                    <li>範圍內、可逆的技術選擇</li>
+                    <li>能從檔案、測試或工具查證的資訊</li>
+                    <li>失敗後可安全重試或調整的方法</li>
+                    <li>不改變目標的局部實作細節</li>
+                  </ul>
+                </div>
+                <div>
+                  <p class="boundary-label boundary-label--stop">必須停下</p>
+                  <ul>
+                    <li>不可逆、敏感或影響外部狀態的行動</li>
+                    <li>需求或授權範圍需要擴張</li>
+                    <li>缺少只有使用者知道的關鍵決定</li>
+                    <li>超過預先定義的失敗或重試門檻</li>
+                  </ul>
+                </div>
+              </div>
+              <p>這個區分能避免兩種極端：Agent 每做一步就停下來，讓自動化失去意義；或一路自行補假設，直到產出偏離真正目標。好的 checkpoint 同時保留速度與控制權。</p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="cautions-title">
+            <p class="section-number">05</p>
+            <div>
+              <h3 id="cautions-title">注意：Prompt 不能取代驗證與風險控制</h3>
+              <ul class="caution-list">
+                <li><strong>不要把 Constraints 和 Checkpoint 混在一起。</strong>前者是持續有效的邊界，後者是觸發暫停的條件。</li>
+                <li><strong>不要把內部思考步驟寫成僵硬劇本。</strong>描述成果與證據，讓模型在邊界內選擇方法。</li>
+                <li><strong>不要用 checkpoint 取代測試。</strong>要求程式測試、引用、檔案 diff 或可重複的驗收證據。</li>
+                <li><strong>不要聲稱所有任務都能全自動。</strong>任務風險、工具權限與外部影響不同，監督強度也應不同。</li>
+              </ul>
+              <p>Agent 會跨多輪呼叫工具並改變環境，因此錯誤可能逐步累積。Anthropic 建議用 eval 先定義成功並維持品質；NIST 也要求部署前測試、運作中監測，以及可重複的衡量與文件。換句話說，prompt 是任務契約的入口，真正可靠的執行仍要靠測試、觀察與可追溯證據。<small class="source-citation">參考：<a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener noreferrer">Anthropic · Demystifying evals for AI agents</a>、<a href="https://airc.nist.gov/airmf-resources/airmf/5-sec-core/" target="_blank" rel="noopener noreferrer">NIST · AI RMF Core</a></small></p>
+            </div>
+          </section>
+
+          <footer class="article-conclusion">
+            <p class="article-kicker">Before you run</p>
+            <h3>寫複雜任務前，先檢查這五項。</h3>
+            <p>背景夠不夠？任務是否只有一個清楚目標？交付物能不能驗收？邊界有沒有寫明？停下來詢問的條件是否具體？五項都清楚，Agent 才能少猜測、少打斷，在正確範圍內把工作做完，再帶著證據回報。</p>
+          </footer>
+        </article>
       </section>
     </main>
 
@@ -638,11 +884,48 @@ h1 em {
   color: var(--accent);
 }
 
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  margin-top: 1.35rem;
+}
+
+.start-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 52px;
+  padding: 0.78rem 1.15rem;
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--accent);
+  font-weight: 750;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.start-button:hover {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+}
+
+.hero-actions p {
+  max-width: 330px;
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.82rem;
+}
+
 .workbench {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.65fr);
   gap: 1rem;
   align-items: start;
+  scroll-margin-top: 1rem;
 }
 
 .composer-shell,
@@ -978,6 +1261,95 @@ pre {
   padding: 1rem;
 }
 
+.example-picker {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.example-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.example-heading .wizard-kicker {
+  margin-bottom: 0.2rem;
+}
+
+.example-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.example-heading > p {
+  max-width: 300px;
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.example-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.15rem 0.6rem;
+  min-height: 92px;
+  padding: 0.8rem;
+  color: var(--muted);
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.example-card:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: var(--surface-raised);
+}
+
+.example-card[aria-pressed="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgb(183 243 107 / 7%);
+}
+
+.example-number {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  color: var(--accent);
+  border: 1px solid rgb(183 243 107 / 35%);
+  border-radius: 5px;
+  grid-row: 1 / span 2;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.7rem;
+}
+
+.example-card strong {
+  font-size: 0.85rem;
+}
+
+.example-card > span:last-child {
+  color: var(--faint);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 .wizard-progress {
   display: grid;
   grid-template-columns: auto minmax(80px, 180px);
@@ -1057,25 +1429,254 @@ pre {
 
 .method-note {
   display: grid;
-  grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
-  gap: 3rem;
+  grid-template-columns: minmax(180px, 0.34fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 6rem);
   margin-block: clamp(5rem, 10vw, 9rem);
   padding-top: 2rem;
   border-top: 1px solid var(--line);
 }
 
-.method-note h2 {
-  max-width: 760px;
-  margin: 0;
-  font-size: clamp(1.8rem, 4vw, 3.5rem);
-  letter-spacing: -0.05em;
-  line-height: 1.08;
+.method-intro {
+  align-self: start;
+  position: sticky;
+  top: 1.5rem;
 }
 
-.method-note > div p {
-  max-width: 760px;
-  margin: 1.25rem 0 0;
+.method-side-note {
+  max-width: 280px;
+  margin: 1.2rem 0 0;
+  color: var(--faint);
+  font-size: 0.82rem;
+}
+
+.method-article {
+  min-width: 0;
+}
+
+.method-header {
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.article-kicker,
+.section-number,
+.boundary-label {
+  margin: 0;
+  color: var(--accent);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.method-header h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 5.2rem);
+  letter-spacing: -0.06em;
+  line-height: 1.02;
+}
+
+.method-lead {
+  max-width: 820px;
+  margin: 1.8rem 0 0;
   color: var(--muted);
+  font-size: clamp(1.02rem, 2vw, 1.25rem);
+  line-height: 1.8;
+}
+
+.source-citation {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--faint);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+.source-citation a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.article-section {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-number {
+  padding-top: 0.25rem;
+}
+
+.article-section h3,
+.article-conclusion h3 {
+  max-width: 820px;
+  margin: 0;
+  font-size: clamp(1.55rem, 3vw, 2.65rem);
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
+.article-section > div > p {
+  max-width: 820px;
+  margin: 1.15rem 0 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.part-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  max-width: 860px;
+  margin-top: 1.5rem;
+}
+
+.part-grid div {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 104px;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.part-grid div:last-child {
+  grid-column: 1 / -1;
+}
+
+.part-grid strong {
+  color: var(--accent);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.part-grid span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+blockquote {
+  max-width: 820px;
+  margin: 1.5rem 0;
+  padding: 1.2rem 1.3rem;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  background: linear-gradient(90deg, rgb(183 243 107 / 8%), transparent);
+}
+
+blockquote p {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 650;
+}
+
+.checkpoint-list {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 860px;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkpoint-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.checkpoint-list li > span {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: var(--accent);
+  border: 1px solid rgb(183 243 107 / 35%);
+  border-radius: 6px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.72rem;
+}
+
+.checkpoint-list strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.checkpoint-list p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.boundary-table {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  max-width: 860px;
+  margin-top: 1.5rem;
+}
+
+.boundary-table > div {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.boundary-label--stop {
+  color: var(--danger);
+}
+
+.boundary-table ul,
+.caution-list {
+  margin: 0.8rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.boundary-table li,
+.caution-list li {
+  margin-top: 0.45rem;
+}
+
+.caution-list {
+  max-width: 860px;
+  padding: 1.1rem 1.1rem 1.1rem 2.3rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.caution-list strong {
+  color: var(--text);
+}
+
+.article-conclusion {
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  border: 1px solid rgb(183 243 107 / 40%);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgb(183 243 107 / 10%), transparent 55%),
+    var(--surface);
+}
+
+.article-conclusion p:last-child {
+  max-width: 820px;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  line-height: 1.8;
 }
 
 footer {
@@ -1171,6 +1772,19 @@ footer a {
     flex: 1;
   }
 
+  .example-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .example-heading > p {
+    text-align: left;
+  }
+
+  .example-grid {
+    grid-template-columns: 1fr;
+  }
+
   .card-grid {
     grid-template-columns: 1fr;
   }
@@ -1182,6 +1796,24 @@ footer a {
   .method-note {
     grid-template-columns: 1fr;
     gap: 1.25rem;
+  }
+
+  .method-intro {
+    position: static;
+  }
+
+  .article-section {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .part-grid,
+  .boundary-table {
+    grid-template-columns: 1fr;
+  }
+
+  .part-grid div:last-child {
+    grid-column: auto;
   }
 
   footer {
@@ -1221,12 +1853,29 @@ footer a {
     width: 100%;
   }
 
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .start-button {
+    width: 100%;
+  }
+
+  .example-picker {
+    padding: 0.8rem;
+  }
+
   .wizard-progress {
     grid-template-columns: 1fr;
   }
 
   .wizard-step {
     min-height: 420px;
+  }
+
+  .checkpoint-list li {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1250,6 +1899,30 @@ export const FIELD_DEFINITIONS = [
   { key: "constraints", label: "Constraints" },
   { key: "checkpoint", label: "Checkpoint" }
 ];
+
+export const PROMPT_EXAMPLES = {
+  research: {
+    context: "我要為產品團隊整理近 12 個月的 AI Agent 安全實務，讀者具備基本技術背景，但沒有專職 AI 治理經驗。",
+    request: "比較 Anthropic、OpenAI 與 NIST 對 human-in-the-loop、任務邊界與風險控制的主要建議。",
+    outputFormat: "使用繁體中文 Markdown。先提供 150 字摘要，再以表格比較來源、核心觀點、適用情境與限制，最後列出可執行的檢查清單；每個主張附原始來源連結。",
+    constraints: "只使用官方或第一方資料；不要把推論寫成已證實事實；不要引用超過 12 個月前的產品規格，除非標示日期。",
+    checkpoint: "若官方來源互相衝突、找不到足以支持核心主張的資料，或需要擴大到付費資料庫，先停下來詢問我；其餘情況繼續完成並回報查證結果。"
+  },
+  development: {
+    context: "我正在維護一個已上線的純前端 Cloudflare Pages 專案，現有測試與視覺風格必須保留。",
+    request: "新增一個可套用範例的提示詞精靈，讓使用者能載入完整五欄內容後再逐步修改。",
+    outputFormat: "提交最小範圍的 HTML、CSS、JavaScript 與測試修改；附上測試結果、瀏覽器驗證項目、Git diff 摘要與部署結果。",
+    constraints: "不要新增框架或第三方 runtime dependency；不要重構無關程式碼；維持鍵盤操作、手機版與既有 Content Security Policy。",
+    checkpoint: "只有在需要不可逆操作、修改需求範圍、取得缺少的憑證或現有測試無法判定預期行為時停下來詢問；其他問題先從 repo 與工具查證。"
+  },
+  content: {
+    context: "我要為第一次使用 AI Agent 的台灣中小企業團隊撰寫一篇教學文章，讀者熟悉一般生成式 AI，但不懂 checkpoint 與任務邊界。",
+    request: "撰寫一篇說明 Context、Request、Output Format、Constraints 與 Checkpoint 的實務教學。",
+    outputFormat: "使用繁體中文與台灣用語，篇幅 1,200 至 1,500 字；包含開場、五部分解說、三個 checkpoint、錯誤示範、完成前檢查表與引用連結。",
+    constraints: "語氣務實，不使用宣傳式形容詞；不要聲稱單一 prompt 能消除所有風險；未證實的來源必須明確標示。",
+    checkpoint: "若目標受眾、發布平台或品牌語氣需要改變，先停下來詢問我；其餘編排與措辭可自行完成，最後列出仍需人工確認的事實。"
+  }
+};
 
 export function buildPrompt(values) {
   const clean = Object.fromEntries(
@@ -1292,7 +1965,9 @@ function initializeApp() {
   const copyButton = document.querySelector("#copy-button");
   const resetButton = document.querySelector("#reset-button");
   const appStatus = document.querySelector("#app-status");
+  const exampleButtons = [...document.querySelectorAll("[data-example]")];
   let currentStep = 0;
+  let activeMode = "wizard";
 
   function getInputsForField(key) {
     return inputs.filter((input) => input.dataset.field === key);
@@ -1318,10 +1993,12 @@ function initializeApp() {
     getInputsForField(key).forEach((input) => {
       if (input !== source) input.value = source.value;
     });
+    exampleButtons.forEach((button) => button.setAttribute("aria-pressed", "false"));
     if (source.value.trim()) clearFieldError(key);
   }
 
   function setMode(mode, focusPanel = true) {
+    activeMode = mode;
     modeTabs.forEach((tab) => {
       const isActive = tab.dataset.mode === mode;
       tab.classList.toggle("is-active", isActive);
@@ -1337,6 +2014,28 @@ function initializeApp() {
       const target = panels[mode].querySelector("textarea:not([hidden])");
       target?.focus();
     }
+  }
+
+  function applyExample(exampleKey) {
+    const example = PROMPT_EXAMPLES[exampleKey];
+    if (!example) return;
+
+    FIELD_DEFINITIONS.forEach(({ key }) => {
+      state[key] = example[key];
+      getInputsForField(key).forEach((input) => {
+        input.value = example[key];
+      });
+      clearFieldError(key);
+    });
+
+    exampleButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.example === exampleKey));
+    });
+    currentStep = 0;
+    updateWizard();
+    setMode("wizard", false);
+    appStatus.textContent = "範例已載入，可逐步修改。";
+    document.querySelector("#wizard-context").focus();
   }
 
   function updateWizard() {
@@ -1428,8 +2127,9 @@ function initializeApp() {
     copyButton.disabled = true;
     outputState.classList.remove("is-ready");
     outputState.innerHTML = "<span></span>等待輸入";
+    exampleButtons.forEach((button) => button.setAttribute("aria-pressed", "false"));
     appStatus.textContent = "內容已清除。";
-    document.querySelector("#card-context").focus();
+    panels[activeMode].querySelector("textarea:not([hidden])")?.focus();
   }
 
   inputs.forEach((input) => {
@@ -1446,6 +2146,10 @@ function initializeApp() {
       modeTabs[targetIndex].focus();
       setMode(modeTabs[targetIndex].dataset.mode, false);
     });
+  });
+
+  exampleButtons.forEach((button) => {
+    button.addEventListener("click", () => applyExample(button.dataset.example));
   });
 
   cardForm.addEventListener("submit", (event) => {
@@ -1477,6 +2181,7 @@ function initializeApp() {
 
   copyButton.addEventListener("click", copyPrompt);
   resetButton.addEventListener("click", resetApp);
+  setMode("wizard", false);
   updateWizard();
 }
 
@@ -1505,7 +2210,7 @@ EOF
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildPrompt, FIELD_DEFINITIONS } from "../public/app.js";
+import { buildPrompt, FIELD_DEFINITIONS, PROMPT_EXAMPLES } from "../public/app.js";
 
 test("提示詞包含五個固定欄位", () => {
   assert.deepEqual(
@@ -1551,6 +2256,15 @@ test("只移除各欄位前後空白，保留內部換行", () => {
   assert.match(result, /^第一行\n第二行\n任務/);
   assert.match(result, /查核條件：\n查核$/);
 });
+
+test("三個範例都提供完整五欄內容", () => {
+  assert.equal(Object.keys(PROMPT_EXAMPLES).length, 3);
+  for (const example of Object.values(PROMPT_EXAMPLES)) {
+    for (const { key } of FIELD_DEFINITIONS) {
+      assert.ok(example[key].trim(), `${key} 不可為空`);
+    }
+  }
+});
 EOF
 
   cat > "$ROOT_DIR/tests/site-contract.test.js" <<'EOF'
@@ -1568,6 +2282,19 @@ test("頁面提供卡片式與精靈式兩種模式", () => {
   assert.match(html, /id="wizard-panel"/);
 });
 
+test("第一屏開始按鈕導向工作區", () => {
+  assert.match(html, /class="start-button" href="#composer"/);
+  assert.match(html, />\s*開始練習\s*</);
+});
+
+test("精靈式是預設模式並提供三個範例", () => {
+  assert.match(html, /id="wizard-tab"[^>]*aria-selected="true"/);
+  assert.match(html, /id="card-tab"[^>]*aria-selected="false"/);
+  assert.match(html, /id="card-panel"[^>]*hidden/);
+  assert.doesNotMatch(html, /id="wizard-panel"[^>]*hidden/);
+  assert.equal((html.match(/data-example="/g) ?? []).length, 3);
+});
+
 test("每種模式都有五個提示詞欄位", () => {
   for (const key of ["context", "request", "outputFormat", "constraints", "checkpoint"]) {
     assert.equal((html.match(new RegExp(`data-field="${key}"`, "g")) ?? []).length, 2);
@@ -1577,6 +2304,19 @@ test("每種模式都有五個提示詞欄位", () => {
 test("頁尾包含指定靈感來源", () => {
   assert.match(html, /https:\/\/x\.com\/RealCodedAlpha\/status\/2072937806801105347/);
   assert.match(html, /感謝/);
+});
+
+test("04 長文包含任務邊界、checkpoint、注意事項與小字引用", () => {
+  assert.match(html, /模型越能自主執行/);
+  assert.match(html, /任務邊界決定 Agent 可以自主到哪裡/);
+  assert.match(html, /Checkpoint 是停車線/);
+  assert.match(html, /涉及不可逆或高風險操作/);
+  assert.match(html, /任務範圍發生實質變化/);
+  assert.match(html, /缺少只有使用者能提供的關鍵資訊/);
+  assert.match(html, /class="source-citation"/);
+  assert.match(html, /anthropic\.com\/engineering\/building-effective-agents/);
+  assert.match(html, /openai\.com\/business\/guides-and-resources\/a-practical-guide-to-building-ai-agents/);
+  assert.match(html, /airc\.nist\.gov\/airmf-resources\/airmf\/5-sec-core/);
 });
 
 test("安全標頭禁止外部連線與 iframe 嵌入", () => {
@@ -1620,13 +2360,18 @@ write_readme() {
 
 以五個欄位練習組合清楚、可執行的 AI 提示詞，並可直接部署至 Cloudflare Pages。
 
+正式站：[https://ai-prompt-exercise.pages.dev](https://ai-prompt-exercise.pages.dev)
+
 ## 功能
 
+- 開始練習：首頁主要按鈕直接移動到提示詞工作區。
+- 三組範例：研究比較、功能開發與內容企劃，可一次帶入完整五欄內容。
 - 卡片式：一次檢視並填寫所有欄位。
-- 精靈式：依序完成五個引導步驟。
+- 精靈式：預設輸入模式，依序完成五個引導步驟。
 - 模式切換：兩種模式共用輸入內容，切換時不遺失資料。
 - 固定格式：依 Context、Request、Output Format、Constraints、Checkpoint 組合提示詞。
 - 一鍵複製：將產生結果複製到剪貼簿。
+- 方法說明：整理任務邊界、Checkpoint 與驗證注意事項，並附官方來源。
 - 本機處理：不使用後端、API 或資料庫，輸入內容不會離開瀏覽器。
 
 ## 輸出格式
@@ -1880,7 +2625,323 @@ task_plan.write_text(content)
 PY
 }
 
+complete_enhancement_research() {
+  cat >> "$ENHANCE_TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 2 次更新筆記 ---
+## 階段 1：來源與研究結論
+
+### 來源 1：Anthropic — Building effective agents
+- URL：https://www.anthropic.com/engineering/building-effective-agents
+- 重點：
+  - Anthropic 將 agent 描述為能動態主導流程與工具使用的系統，並建議只在需要時增加複雜度。
+  - 任務清楚後，agent 可獨立規劃與執行，從環境取得 ground truth；遇到 checkpoint 或 blocker 才回到人類。
+  - 應設定停止條件，並以沙箱、guardrail 與測試管理自主執行的累積風險。
+
+### 來源 2：OpenAI — A practical guide to building agents
+- URL：https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/
+- 重點：
+  - Agent 在明確 guardrail 內獨立完成工作；清楚、結構化的 instructions 可降低歧義。
+  - 人類介入的主要理由包含超過失敗門檻，以及敏感、不可逆或高風險的操作。
+  - 可靠 agent 仍需要清楚工具、guardrail、eval 與 human-in-the-loop。
+
+### 來源 3：OpenAI Agents SDK — Human-in-the-loop
+- URL：https://openai.github.io/openai-agents-python/human_in_the_loop/
+- 重點：
+  - 敏感工具可以宣告需要 approval；run 會暫停、保留 state，取得人類決定後從同一狀態繼續。
+  - Checkpoint 應綁定具體工具或條件，不應讓 agent 每一步都停下來詢問。
+
+### 來源 4：NIST AI RMF Core
+- URL：https://airc.nist.gov/airmf-resources/airmf/5-sec-core/
+- 重點：
+  - NIST 要求明確定義 human-AI 的角色、責任、監督流程、目標使用範圍與風險容忍度。
+  - AI 系統應在部署前測試、運作中監測，並以可重複的衡量與文件證明成效。
+
+### 來源 5：Anthropic — Demystifying evals for AI agents
+- URL：https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+- 重點：
+  - Agent 跨多輪呼叫工具與改變環境，錯誤可能累積。
+  - Evals 迫使團隊先定義「成功」並在改版後維持一致品質。
+
+### 來源 6：RealCodedAlpha 原始貼文
+- URL：https://x.com/RealCodedAlpha/status/2072937806801105347
+- 重點：
+  - 提供 Context、Request、Output Format、Constraints、Checkpoint 的五部分結構。
+  - 未找到可證實此圖為 Anthropic 內部文件的第一方資料；頁面只標示為社群流傳的結構與靈感來源。
+
+## 綜合發現
+
+### 文章主軸
+- 強模型不代表可以省略任務規格；應把篇幅放在目標、可用背景、交付格式、邊界與驗收條件。
+- Checkpoint 的目的不是頻繁報到，而是把人類判斷保留在不可逆、高風險、範圍變更或缺少關鍵資訊的節點。
+- 使用者提出的第三類「需要用戶提供信息」可視為 blocker；OpenAI 另提供「超過失敗門檻」作為實務補充。
+- Constraints 說明不能做什麼；Checkpoint 說明何時必須停。兩者不可混成一串模糊警語。
+- Output Format 應包含驗收線索；複雜任務仍需 eval、測試或可觀察證據，不能只靠 prompt。
+EOF
+
+  python3 - "$ENHANCE_TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 1：研究任務邊界、checkpoint 與人類監督來源", "- [x] 階段 1：研究任務邊界、checkpoint 與人類監督來源")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("- [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "- [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 1** - 查閱並整理權威來源", "**目前階段 2** - 實作三個 frame 與互動")
+task_plan.write_text(content)
+PY
+}
+
+complete_enhancement_build() {
+  cat >> "$ENHANCE_TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 3 次更新筆記 ---
+## 階段 2：實作結果
+- 第一屏新增「開始練習」CTA，以 `href="#composer"` 提供無 JavaScript fallback，並沿用 smooth scroll 與 reduced-motion 設定。
+- 精靈式已改為 HTML 與 JavaScript 的預設模式，避免頁面載入時先閃現卡片式。
+- 新增研究比較、功能開發、內容企劃 3 個範例；點擊後同時填入五個欄位、回到精靈第一步並保留卡片式同步內容。
+- 「04 Why this works」已擴充成五節長文，涵蓋五部分任務契約、任務邊界、三個 checkpoint、繼續／停下條件及注意事項。
+- 每個外部主張後以 `small.source-citation` 顯示第一方引用連結；原始貼文明確標示為靈感來源，不聲稱已獲 Anthropic 證實。
+- 自動化測試由 7 項增加為 11 項，涵蓋 CTA、預設模式、範例完整性與長文引用契約。
+EOF
+
+  python3 - "$ENHANCE_TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 2：實作 CTA、範例、預設精靈與 04 長文", "- [x] 階段 2：實作 CTA、範例、預設精靈與 04 長文")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("- [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "- [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 2** - 實作三個 frame 與互動", "**目前階段 3** - 執行自動化與瀏覽器驗證")
+task_plan.write_text(content)
+PY
+}
+
+complete_enhancement_validation() {
+  cat >> "$ENHANCE_TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 4 次更新筆記 ---
+## 階段 3：驗證結果
+- `npm test`：11/11 通過。
+- 「開始練習」CTA 點擊後，網址 hash 變為 `#composer`，工作區捲動到視窗頂端。
+- 精靈式維持預設選取；3 個範例皆可填入完整五欄，並同步到卡片式欄位。
+- 長文包含 5 個主題段落與 10 個小字引用連結；引用連結皆使用 `noopener noreferrer`。
+- 375、768、1024、1440 px 四種寬度皆無水平溢位；手機為單欄、較寬螢幕顯示三欄範例。
+- 所有 textarea 都有對應 label，無重複 id、無未命名控制項；本機互動檢查未發現阻斷性錯誤。
+EOF
+
+  python3 - "$ENHANCE_TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 3：自動化、瀏覽器、響應式與引用驗證", "- [x] 階段 3：自動化、瀏覽器、響應式與引用驗證")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("  - [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "  - [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 3** - 執行自動化與瀏覽器驗證", "**目前階段 4** - 推送 GitHub 並重新發布 Cloudflare Pages")
+task_plan.write_text(content)
+PY
+}
+
+publish_enhancement_git() {
+  local changed_file
+  local untracked_file
+  local branch
+  local origin_url
+
+  branch="$(git -C "$ROOT_DIR" branch --show-current)"
+  origin_url="$(git -C "$ROOT_DIR" remote get-url origin)"
+  [ "$branch" = "main" ] || {
+    echo "錯誤：目前 branch 不是 main" >&2
+    exit 1
+  }
+  [ "$origin_url" = "https://github.com/lazyjerry/ai-prompt-exercise.git" ] || {
+    echo "錯誤：origin 不符合指定 repository" >&2
+    exit 1
+  }
+
+  for changed_file in $(git -C "$ROOT_DIR" diff --name-only); do
+    case "$changed_file" in
+      README.md|public/app.js|public/index.html|public/styles.css|scripts/project-workflow.sh|tests/prompt-builder.test.js|tests/site-contract.test.js)
+        ;;
+      *)
+        echo "錯誤：發現未授權變更：$changed_file" >&2
+        exit 1
+        ;;
+    esac
+  done
+
+  untracked_file="$(git -C "$ROOT_DIR" ls-files --others --exclude-standard | head -n 1)"
+  [ -z "$untracked_file" ] || {
+    echo "錯誤：發現未追蹤檔案：$untracked_file" >&2
+    exit 1
+  }
+
+  sh -n "$ROOT_DIR/scripts/project-workflow.sh"
+  git -C "$ROOT_DIR" diff --check
+  npm --prefix "$ROOT_DIR" test
+
+  if rg -q --hidden --glob '!.git/**' --glob '!node_modules/**' \
+    '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|CLOUDFLARE_API_TOKEN[[:space:]]*=|API_KEY[[:space:]]*=|SECRET[[:space:]]*=)' \
+    "$ROOT_DIR"; then
+    echo "錯誤：敏感資料 pattern 掃描命中" >&2
+    exit 1
+  fi
+
+  git -C "$ROOT_DIR" add \
+    README.md \
+    public/app.js \
+    public/index.html \
+    public/styles.css \
+    scripts/project-workflow.sh \
+    tests/prompt-builder.test.js \
+    tests/site-contract.test.js
+  git -C "$ROOT_DIR" commit -m "feat: expand prompt workflow guidance"
+  git -C "$ROOT_DIR" push origin main
+}
+
+deploy_enhancement_cloudflare() {
+  local commit_hash
+  local commit_message
+  local temp_dir
+  local production_url
+  local status_code
+
+  commit_hash="$(git -C "$ROOT_DIR" rev-parse HEAD)"
+  commit_message="$(git -C "$ROOT_DIR" log -1 --pretty=%s)"
+  production_url="https://ai-prompt-exercise.pages.dev"
+  temp_dir="$(mktemp -d)"
+  trap 'rm -rf "$temp_dir"' EXIT
+
+  npm --prefix "$ROOT_DIR" test
+  npm --prefix "$ROOT_DIR" run deploy -- \
+    --branch main \
+    --commit-hash "$commit_hash" \
+    --commit-message "$commit_message" \
+    --commit-dirty=false
+
+  "$ROOT_DIR/node_modules/.bin/wrangler" pages deployment list \
+    --project-name ai-prompt-exercise
+
+  status_code="$(curl -fsS -o "$temp_dir/index.html" -w '%{http_code}' "$production_url/")"
+  [ "$status_code" = "200" ] || {
+    echo "錯誤：正式站回應狀態為 $status_code" >&2
+    exit 1
+  }
+
+  grep -q 'class="start-button"' "$temp_dir/index.html"
+  grep -q 'data-example="research"' "$temp_dir/index.html"
+  grep -q 'id="why-it-works"' "$temp_dir/index.html"
+
+  curl -fsS "$production_url/app.js" -o "$temp_dir/app.js"
+  curl -fsS "$production_url/styles.css" -o "$temp_dir/styles.css"
+  cmp -s "$ROOT_DIR/public/app.js" "$temp_dir/app.js"
+  cmp -s "$ROOT_DIR/public/styles.css" "$temp_dir/styles.css"
+
+  echo "正式站驗證通過：$production_url"
+}
+
+complete_enhancement_delivery() {
+  local commit_hash
+  commit_hash="$(git -C "$ROOT_DIR" rev-parse HEAD)"
+
+  cat >> "$ENHANCE_TASK_DIR/notes.md" <<EOF
+
+---  2026-07-04  第 5 次更新筆記 ---
+## 階段 4：發布結果
+- Git commit：\`$commit_hash\`
+- GitHub：已推送至 \`origin/main\`。
+- Cloudflare Pages：已重新發布至 \`https://ai-prompt-exercise.pages.dev\`。
+- 正式站回應、內容標記與靜態資產校驗完成。
+EOF
+
+  python3 - "$ENHANCE_TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 4：GitHub 推送與 Cloudflare Pages 重新發布", "- [x] 階段 4：GitHub 推送與 Cloudflare Pages 重新發布")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("  - [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "  - [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 4** - 推送 GitHub 並重新發布 Cloudflare Pages", "**目前階段 5** - 執行完整性檢核並交付")
+task_plan.write_text(content)
+PY
+}
+
+complete_enhancement_task() {
+  local commit_hash
+  commit_hash="$(git -C "$ROOT_DIR" rev-parse HEAD)"
+
+  cat > "$ENHANCE_TASK_DIR/report.md" <<EOF
+# 擴充提示詞頁面內容：完成報告
+
+## 完成項目
+- 第一屏新增「開始練習」CTA，點擊後移動到第二屏工作區。
+- 第二屏以精靈式為預設，新增 3 個可直接套用的完整範例。
+- 04 Why this works 擴充成包含任務邊界、Checkpoint、驗證與風險注意事項的長文。
+- 外部主張使用原始貼文、Anthropic、OpenAI 與 NIST 第一方來源，並以小字連結標記。
+- README 已同步正式站、功能與發布方法。
+
+## 驗證證據
+- 自動化測試：11/11 通過。
+- 正式瀏覽器：CTA、預設模式、範例套用與欄位同步通過。
+- 響應式：375、768、1024、1440 px 無水平溢位。
+- Git commit：\`$commit_hash\`
+- 正式站：\`https://ai-prompt-exercise.pages.dev\`
+EOF
+
+  cat >> "$ENHANCE_TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 6 次更新筆記 ---
+## 階段 5：完整性檢核
+- 功能、文件、GitHub 與 production deployment 均已完成。
+- `report.md` 已建立，任務紀錄可通過 knowledge-skill 完整性檢核。
+EOF
+
+  python3 - "$ENHANCE_TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 5：完整性檢核與交付", "- [x] 階段 5：完整性檢核與交付")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("  - [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "  - [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 5** - 執行完整性檢核並交付", "**已完成** - 所有階段已完成")
+task_plan.write_text(content)
+PY
+}
+
 case "${1:-}" in
+  enhance-init)
+    write_enhancement_task_files
+    ;;
+  enhance-research)
+    complete_enhancement_research
+    ;;
+  enhance-build)
+    complete_enhancement_build
+    ;;
+  enhance-validation)
+    complete_enhancement_validation
+    ;;
+  enhance-push)
+    publish_enhancement_git
+    ;;
+  enhance-deploy)
+    deploy_enhancement_cloudflare
+    ;;
+  enhance-delivery)
+    complete_enhancement_delivery
+    ;;
+  enhance-complete)
+    complete_enhancement_task
+    ;;
   init)
     write_initial_task_files
     ;;
@@ -1909,7 +2970,7 @@ case "${1:-}" in
     complete_stage_five
     ;;
   *)
-    echo "Usage: $0 {init|stage1|site|stage2|stage3|readme|clean|stage4|stage5}" >&2
+    echo "Usage: $0 {enhance-init|enhance-research|enhance-build|enhance-validation|enhance-push|enhance-deploy|enhance-delivery|enhance-complete|init|stage1|site|stage2|stage3|readme|clean|stage4|stage5}" >&2
     exit 1
     ;;
 esac

@@ -35,6 +35,13 @@
           <span>卡片式</span>
           <span>精靈式</span>
         </div>
+        <div class="hero-actions">
+          <a class="start-button" href="#composer">
+            開始練習
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 19-7-7 1.4-1.4 4.6 4.6V3h2v12.2l4.6-4.6L19 12l-7 7Z"/></svg>
+          </a>
+          <p>從 3 個範例開始，或依序建立自己的提示詞。</p>
+        </div>
       </section>
 
       <section class="workbench" aria-label="提示詞工作區">
@@ -45,18 +52,18 @@
               <h2>建立你的提示詞</h2>
             </div>
             <div class="mode-switch" role="tablist" aria-label="輸入模式">
-              <button class="mode-tab is-active" id="card-tab" type="button" role="tab" aria-selected="true" aria-controls="card-panel" data-mode="card">
+              <button class="mode-tab" id="card-tab" type="button" role="tab" aria-selected="false" aria-controls="card-panel" tabindex="-1" data-mode="card">
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3Zm2 2v4h4V5H5Zm8-2h8v8h-8V3Zm2 2v4h4V5h-4ZM3 13h8v8H3v-8Zm2 2v4h4v-4H5Zm8-2h8v8h-8v-8Zm2 2v4h4v-4h-4Z"/></svg>
                 卡片式
               </button>
-              <button class="mode-tab" id="wizard-tab" type="button" role="tab" aria-selected="false" aria-controls="wizard-panel" tabindex="-1" data-mode="wizard">
+              <button class="mode-tab is-active" id="wizard-tab" type="button" role="tab" aria-selected="true" aria-controls="wizard-panel" data-mode="wizard">
                 <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h14v3H5V4Zm0 6h9v3H5v-3Zm0 6h14v3H5v-3Zm11-7 4 2.5-4 2.5V9Z"/></svg>
                 精靈式
               </button>
             </div>
           </div>
 
-          <div id="card-panel" role="tabpanel" aria-labelledby="card-tab">
+          <div id="card-panel" role="tabpanel" aria-labelledby="card-tab" hidden>
             <form id="card-form" novalidate>
               <div class="card-grid">
                 <article class="field-card field-card--wide">
@@ -116,7 +123,33 @@
             </form>
           </div>
 
-          <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab" hidden>
+          <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab">
+            <section class="example-picker" aria-labelledby="example-title">
+              <div class="example-heading">
+                <div>
+                  <p class="wizard-kicker">Quick start / 範例</p>
+                  <h3 id="example-title">先載入一個完整範例</h3>
+                </div>
+                <p>五個欄位會一次帶入，你仍可逐步修改。</p>
+              </div>
+              <div class="example-grid">
+                <button class="example-card" type="button" data-example="research" aria-pressed="false">
+                  <span class="example-number">A</span>
+                  <strong>研究比較</strong>
+                  <span>整理近期資料、比較差異並標記來源</span>
+                </button>
+                <button class="example-card" type="button" data-example="development" aria-pressed="false">
+                  <span class="example-number">B</span>
+                  <strong>功能開發</strong>
+                  <span>限定修改範圍、測試與停下條件</span>
+                </button>
+                <button class="example-card" type="button" data-example="content" aria-pressed="false">
+                  <span class="example-number">C</span>
+                  <strong>內容企劃</strong>
+                  <span>指定受眾、篇幅、語氣與審核節點</span>
+                </button>
+              </div>
+            </section>
             <div class="wizard-progress">
               <p id="wizard-progress-label">步驟 1 / 5</p>
               <div class="progress-track" aria-hidden="true"><span id="wizard-progress-bar"></span></div>
@@ -211,12 +244,118 @@
         </aside>
       </section>
 
-      <section class="method-note" aria-labelledby="method-title">
-        <p class="eyebrow"><span>04</span> Why this works</p>
-        <div>
-          <h2 id="method-title">好的提示詞，先消除模型需要猜測的地方。</h2>
-          <p>Context 說明原因，Request 鎖定任務，Output Format 定義交付物，Constraints 收好邊界，Checkpoint 留下需要人類判斷的節點。</p>
+      <section class="method-note" id="why-it-works" aria-labelledby="method-title">
+        <div class="method-intro">
+          <p class="eyebrow"><span>04</span> Why this works</p>
+          <p class="method-side-note">不是把 prompt 寫得更長，而是把任務規格寫得更清楚。</p>
         </div>
+
+        <article class="method-article">
+          <header class="method-header">
+            <p class="article-kicker">Agent-era prompting</p>
+            <h2 id="method-title">模型越能自主執行，<br>任務邊界越要清楚。</h2>
+            <p class="method-lead">社群流傳的「Fable 5 Prompt」圖像把提示詞拆成 Context、Request、Output Format、Constraints 與 Checkpoint。這不是已獲 Anthropic 證實的內部格式，但它點出一個實用方向：對 Claude、Codex 或其他能使用工具、跨多步驟工作的 Agent 而言，價值不在堆疊角色設定或教它逐句思考，而在把目標、可用資訊、交付物、邊界與停點說清楚。<small class="source-citation">靈感來源：<a href="https://x.com/RealCodedAlpha/status/2072937806801105347" target="_blank" rel="noopener noreferrer">RealCodedAlpha 原始貼文</a></small></p>
+          </header>
+
+          <section class="article-section" aria-labelledby="five-parts-title">
+            <p class="section-number">01</p>
+            <div>
+              <h3 id="five-parts-title">五個部分是一份最小任務契約</h3>
+              <p>Context 讓模型理解「為誰、在什麼情境、已知什麼」；Request 用清楚動詞定義要完成的工作；Output Format 把結果變成可驗收的交付物；Constraints 指出不能假設、不能更動與不能跨越的界線；Checkpoint 則把必須交回人類判斷的時機寫成明確條件。這五部分的作用不是增加篇幅，而是減少模型必須自行猜測的空間。</p>
+              <div class="part-grid" aria-label="提示詞五部分">
+                <div><strong>Context</strong><span>提供必要背景，不傾倒無關資料。</span></div>
+                <div><strong>Request</strong><span>說清楚要完成什麼，而非只描述主題。</span></div>
+                <div><strong>Output</strong><span>定義格式、篇幅、欄位與驗收方式。</span></div>
+                <div><strong>Constraints</strong><span>界定不可假設、不可更動與禁止事項。</span></div>
+                <div><strong>Checkpoint</strong><span>只保留需要人類裁決的停點。</span></div>
+              </div>
+              <p>OpenAI 的 Agent 指南同樣把 instructions 與 guardrails 視為基礎元件，並指出清楚、結構化的指令能減少歧義；Anthropic 則建議先採用最簡單、可組合的模式，只在任務真的需要時才增加複雜度。<small class="source-citation">參考：<a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">OpenAI · A practical guide to building agents</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="boundary-title">
+            <p class="section-number">02</p>
+            <div>
+              <h3 id="boundary-title">任務邊界決定 Agent 可以自主到哪裡</h3>
+              <p>強模型可以自己規劃步驟、選擇工具、從錯誤中修正並持續執行，但「能決定怎麼做」不等於「可以自行改變要做什麼」。一份好的 prompt 應區分目標與手段：目標、不可跨越的範圍、可使用的資料與驗收標準由人定義；範圍內可逆、低風險的實作細節，才交給 Agent 自主處理。</p>
+              <blockquote>
+                <p>清楚的邊界不是限制模型能力，而是把自主權放在正確的位置。</p>
+              </blockquote>
+              <p>Anthropic 將 Agent 描述為能動態主導流程與工具使用的系統：任務清楚後，它可以獨立規劃與操作，並根據工具結果或程式執行等環境證據判斷進度。NIST AI RMF 也要求明確記錄目標使用範圍、human-AI 角色、監督責任與風險容忍度。<small class="source-citation">參考：<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a>、<a href="https://airc.nist.gov/airmf-resources/airmf/5-sec-core/" target="_blank" rel="noopener noreferrer">NIST · AI RMF Core</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section checkpoint-section" aria-labelledby="checkpoint-title">
+            <p class="section-number">03</p>
+            <div>
+              <h3 id="checkpoint-title">Checkpoint 是停車線，不是每一步的報到</h3>
+              <p>Checkpoint 應該回答：「發生什麼情況時，Agent 必須先停下來取得我的決定？」條件越具體，Agent 越能在安全範圍內持續工作。若只寫「有問題就問我」，模型可能過度中斷；若完全不寫，它又可能在資訊不足或風險升高時自行猜測。</p>
+              <ol class="checkpoint-list">
+                <li>
+                  <span>01</span>
+                  <div><strong>涉及不可逆或高風險操作</strong><p>例如刪除資料、正式發布、付款、改變權限，或任何難以回復且會影響他人的動作。</p></div>
+                </li>
+                <li>
+                  <span>02</span>
+                  <div><strong>任務範圍發生實質變化</strong><p>例如必須新增原本未授權的功能、接觸新的系統，或為了完成工作而改寫原定目標。</p></div>
+                </li>
+                <li>
+                  <span>03</span>
+                  <div><strong>缺少只有使用者能提供的關鍵資訊</strong><p>例如業務規則、憑證、選擇偏好或無法從現有檔案與可用工具查證的決策。</p></div>
+                </li>
+              </ol>
+              <p>OpenAI 建議對敏感、不可逆或高風險行動啟用人類監督，也可在超過重試或失敗門檻時轉交使用者；OpenAI Agents SDK 的 approval flow 則示範了「暫停、保留狀態、取得決定、從原處繼續」的實作方式。Anthropic 也明確指出 Agent 可在 checkpoint 或 blocker 才暫停。<small class="source-citation">參考：<a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">OpenAI · Agent guide</a>、<a href="https://openai.github.io/openai-agents-python/human_in_the_loop/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK · Human-in-the-loop</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic · Building effective agents</a></small></p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="continue-title">
+            <p class="section-number">04</p>
+            <div>
+              <h3 id="continue-title">其他情況，應讓 Agent 繼續完成</h3>
+              <div class="boundary-table">
+                <div>
+                  <p class="boundary-label">可以繼續</p>
+                  <ul>
+                    <li>範圍內、可逆的技術選擇</li>
+                    <li>能從檔案、測試或工具查證的資訊</li>
+                    <li>失敗後可安全重試或調整的方法</li>
+                    <li>不改變目標的局部實作細節</li>
+                  </ul>
+                </div>
+                <div>
+                  <p class="boundary-label boundary-label--stop">必須停下</p>
+                  <ul>
+                    <li>不可逆、敏感或影響外部狀態的行動</li>
+                    <li>需求或授權範圍需要擴張</li>
+                    <li>缺少只有使用者知道的關鍵決定</li>
+                    <li>超過預先定義的失敗或重試門檻</li>
+                  </ul>
+                </div>
+              </div>
+              <p>這個區分能避免兩種極端：Agent 每做一步就停下來，讓自動化失去意義；或一路自行補假設，直到產出偏離真正目標。好的 checkpoint 同時保留速度與控制權。</p>
+            </div>
+          </section>
+
+          <section class="article-section" aria-labelledby="cautions-title">
+            <p class="section-number">05</p>
+            <div>
+              <h3 id="cautions-title">注意：Prompt 不能取代驗證與風險控制</h3>
+              <ul class="caution-list">
+                <li><strong>不要把 Constraints 和 Checkpoint 混在一起。</strong>前者是持續有效的邊界，後者是觸發暫停的條件。</li>
+                <li><strong>不要把內部思考步驟寫成僵硬劇本。</strong>描述成果與證據，讓模型在邊界內選擇方法。</li>
+                <li><strong>不要用 checkpoint 取代測試。</strong>要求程式測試、引用、檔案 diff 或可重複的驗收證據。</li>
+                <li><strong>不要聲稱所有任務都能全自動。</strong>任務風險、工具權限與外部影響不同，監督強度也應不同。</li>
+              </ul>
+              <p>Agent 會跨多輪呼叫工具並改變環境，因此錯誤可能逐步累積。Anthropic 建議用 eval 先定義成功並維持品質；NIST 也要求部署前測試、運作中監測，以及可重複的衡量與文件。換句話說，prompt 是任務契約的入口，真正可靠的執行仍要靠測試、觀察與可追溯證據。<small class="source-citation">參考：<a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents" target="_blank" rel="noopener noreferrer">Anthropic · Demystifying evals for AI agents</a>、<a href="https://airc.nist.gov/airmf-resources/airmf/5-sec-core/" target="_blank" rel="noopener noreferrer">NIST · AI RMF Core</a></small></p>
+            </div>
+          </section>
+
+          <footer class="article-conclusion">
+            <p class="article-kicker">Before you run</p>
+            <h3>寫複雜任務前，先檢查這五項。</h3>
+            <p>背景夠不夠？任務是否只有一個清楚目標？交付物能不能驗收？邊界有沒有寫明？停下來詢問的條件是否具體？五項都清楚，Agent 才能少猜測、少打斷，在正確範圍內把工作做完，再帶著證據回報。</p>
+          </footer>
+        </article>
       </section>
     </main>
 
