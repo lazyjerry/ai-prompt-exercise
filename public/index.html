@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="用 Context、Request、Output Format、Constraints 與 Checkpoint 組合清楚、可執行的 AI 提示詞。">
+    <meta name="theme-color" content="#090c0b">
+    <title>Prompt Forge｜提示詞練習工坊</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#composer">跳至提示詞編輯區</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Prompt Forge 首頁">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M12 2 4 6.5v11L12 22l8-4.5v-11L12 2Zm0 2.3 5.9 3.3L12 11 6.1 7.6 12 4.3Zm-6 5.1 5 2.8v6.9l-5-2.8V9.4Zm7 9.7v-6.9l5-2.8v6.9l-5 2.8Z"/>
+        </svg>
+        <span>Prompt Forge</span>
+      </a>
+      <p class="header-meta">5-part prompt system <span aria-hidden="true">/</span> browser only</p>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow"><span>01</span> Prompt workbench</p>
+        <h1 id="page-title">把模糊需求，整理成<br><em>模型能執行</em>的提示詞。</h1>
+        <p class="hero-copy">依序釐清背景、任務、交付格式、約束與查核點。內容只在你的瀏覽器內處理，不會上傳。</p>
+        <div class="hero-tags" aria-label="工具特色">
+          <span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H5v12h14V10h-2V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 0 1 6 0v3H9Zm-2 2h10v8H7v-8Z"/></svg>
+            本機處理
+          </span>
+          <span>卡片式</span>
+          <span>精靈式</span>
+        </div>
+      </section>
+
+      <section class="workbench" aria-label="提示詞工作區">
+        <div class="composer-shell" id="composer">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-index">02 / Compose</p>
+              <h2>建立你的提示詞</h2>
+            </div>
+            <div class="mode-switch" role="tablist" aria-label="輸入模式">
+              <button class="mode-tab is-active" id="card-tab" type="button" role="tab" aria-selected="true" aria-controls="card-panel" data-mode="card">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3Zm2 2v4h4V5H5Zm8-2h8v8h-8V3Zm2 2v4h4V5h-4ZM3 13h8v8H3v-8Zm2 2v4h4v-4H5Zm8-2h8v8h-8v-8Zm2 2v4h4v-4h-4Z"/></svg>
+                卡片式
+              </button>
+              <button class="mode-tab" id="wizard-tab" type="button" role="tab" aria-selected="false" aria-controls="wizard-panel" tabindex="-1" data-mode="wizard">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h14v3H5V4Zm0 6h9v3H5v-3Zm0 6h14v3H5v-3Zm11-7 4 2.5-4 2.5V9Z"/></svg>
+                精靈式
+              </button>
+            </div>
+          </div>
+
+          <div id="card-panel" role="tabpanel" aria-labelledby="card-tab">
+            <form id="card-form" novalidate>
+              <div class="card-grid">
+                <article class="field-card field-card--wide">
+                  <div class="field-number">01</div>
+                  <div class="field-copy">
+                    <label for="card-context">Context <span>背景</span></label>
+                    <p id="card-context-hint">提供相關角色、情境、受眾與現有資料，讓模型不必猜測。</p>
+                  </div>
+                  <textarea id="card-context" data-field="context" aria-describedby="card-context-hint card-context-error" placeholder="例：我正在為第一次接觸生成式 AI 的大學生設計 30 分鐘工作坊…" rows="4"></textarea>
+                  <p class="field-error" id="card-context-error" data-error-for="context" aria-live="polite"></p>
+                </article>
+
+                <article class="field-card">
+                  <div class="field-number">02</div>
+                  <div class="field-copy">
+                    <label for="card-request">Request <span>任務</span></label>
+                    <p id="card-request-hint">用一句清楚的動詞開頭，說明你要模型完成什麼。</p>
+                  </div>
+                  <textarea id="card-request" data-field="request" aria-describedby="card-request-hint card-request-error" placeholder="例：設計一份包含實作練習的課程大綱。" rows="5"></textarea>
+                  <p class="field-error" id="card-request-error" data-error-for="request" aria-live="polite"></p>
+                </article>
+
+                <article class="field-card">
+                  <div class="field-number">03</div>
+                  <div class="field-copy">
+                    <label for="card-output-format">Output Format <span>交付格式</span></label>
+                    <p id="card-output-format-hint">指定結構、長度、語言、欄位或範例。</p>
+                  </div>
+                  <textarea id="card-output-format" data-field="outputFormat" aria-describedby="card-output-format-hint card-output-format-error" placeholder="例：使用 Markdown 表格，欄位為時間、主題、活動與學習成果。" rows="5"></textarea>
+                  <p class="field-error" id="card-output-format-error" data-error-for="outputFormat" aria-live="polite"></p>
+                </article>
+
+                <article class="field-card">
+                  <div class="field-number">04</div>
+                  <div class="field-copy">
+                    <label for="card-constraints">Constraints <span>約束</span></label>
+                    <p id="card-constraints-hint">列出不能假設、不能更動或不能越界的條件。</p>
+                  </div>
+                  <textarea id="card-constraints" data-field="constraints" aria-describedby="card-constraints-hint card-constraints-error" placeholder="例：不要假設學員有程式背景；不使用付費工具。" rows="5"></textarea>
+                  <p class="field-error" id="card-constraints-error" data-error-for="constraints" aria-live="polite"></p>
+                </article>
+
+                <article class="field-card">
+                  <div class="field-number">05</div>
+                  <div class="field-copy">
+                    <label for="card-checkpoint">Checkpoint <span>查核點</span></label>
+                    <p id="card-checkpoint-hint">說明遇到哪些決策、風險或缺少資訊時，應先停下來詢問。</p>
+                  </div>
+                  <textarea id="card-checkpoint" data-field="checkpoint" aria-describedby="card-checkpoint-hint card-checkpoint-error" placeholder="例：若需要改變受眾或延長課程時間，先停下來詢問我。" rows="5"></textarea>
+                  <p class="field-error" id="card-checkpoint-error" data-error-for="checkpoint" aria-live="polite"></p>
+                </article>
+              </div>
+              <button class="primary-button" type="submit">
+                <span>組合提示詞</span>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab" hidden>
+            <div class="wizard-progress">
+              <p id="wizard-progress-label">步驟 1 / 5</p>
+              <div class="progress-track" aria-hidden="true"><span id="wizard-progress-bar"></span></div>
+            </div>
+            <form id="wizard-form" novalidate>
+              <section class="wizard-step is-active" data-wizard-step="0" aria-labelledby="wizard-context-title">
+                <p class="wizard-kicker">01 / Context</p>
+                <h3 id="wizard-context-title">先說明背景是什麼</h3>
+                <p>誰會使用結果？你正在處理什麼情境？模型已經有哪些資料？</p>
+                <label for="wizard-context">背景資訊</label>
+                <textarea id="wizard-context" data-field="context" aria-describedby="wizard-context-error" placeholder="我正在為…" rows="8"></textarea>
+                <p class="field-error" id="wizard-context-error" data-error-for="context" aria-live="polite"></p>
+              </section>
+
+              <section class="wizard-step" data-wizard-step="1" aria-labelledby="wizard-request-title" hidden>
+                <p class="wizard-kicker">02 / Request</p>
+                <h3 id="wizard-request-title">模型到底要完成什麼</h3>
+                <p>以明確動詞描述單一任務，避免把目標藏在一大段背景裡。</p>
+                <label for="wizard-request">具體任務</label>
+                <textarea id="wizard-request" data-field="request" aria-describedby="wizard-request-error" placeholder="請設計…" rows="8"></textarea>
+                <p class="field-error" id="wizard-request-error" data-error-for="request" aria-live="polite"></p>
+              </section>
+
+              <section class="wizard-step" data-wizard-step="2" aria-labelledby="wizard-output-title" hidden>
+                <p class="wizard-kicker">03 / Output Format</p>
+                <h3 id="wizard-output-title">結果要怎麼交付</h3>
+                <p>指定結構、長度、語言或必要欄位，讓結果可以直接使用。</p>
+                <label for="wizard-output-format">交付格式</label>
+                <textarea id="wizard-output-format" data-field="outputFormat" aria-describedby="wizard-output-format-error" placeholder="請使用 Markdown…" rows="8"></textarea>
+                <p class="field-error" id="wizard-output-format-error" data-error-for="outputFormat" aria-live="polite"></p>
+              </section>
+
+              <section class="wizard-step" data-wizard-step="3" aria-labelledby="wizard-constraints-title" hidden>
+                <p class="wizard-kicker">04 / Constraints</p>
+                <h3 id="wizard-constraints-title">哪些不能假設、不能越界</h3>
+                <p>列出不可變更的條件、禁止事項，以及模型不應自行補完的資訊。</p>
+                <label for="wizard-constraints">約束條件</label>
+                <textarea id="wizard-constraints" data-field="constraints" aria-describedby="wizard-constraints-error" placeholder="不要假設…" rows="8"></textarea>
+                <p class="field-error" id="wizard-constraints-error" data-error-for="constraints" aria-live="polite"></p>
+              </section>
+
+              <section class="wizard-step" data-wizard-step="4" aria-labelledby="wizard-checkpoint-title" hidden>
+                <p class="wizard-kicker">05 / Checkpoint</p>
+                <h3 id="wizard-checkpoint-title">什麼時候該停下來問你</h3>
+                <p>把需要你裁決的風險、範圍變更或缺少資訊寫清楚。</p>
+                <label for="wizard-checkpoint">查核條件</label>
+                <textarea id="wizard-checkpoint" data-field="checkpoint" aria-describedby="wizard-checkpoint-error" placeholder="只有遇到…才停下來詢問我。" rows="8"></textarea>
+                <p class="field-error" id="wizard-checkpoint-error" data-error-for="checkpoint" aria-live="polite"></p>
+              </section>
+
+              <div class="wizard-actions">
+                <button class="secondary-button" id="wizard-previous" type="button" disabled>
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m11 5-7 7 7 7 1.4-1.4L7.8 13H20v-2H7.8l4.6-4.6L11 5Z"/></svg>
+                  上一步
+                </button>
+                <button class="primary-button" id="wizard-next" type="button">
+                  下一步
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></svg>
+                </button>
+                <button class="primary-button" id="wizard-generate" type="submit" hidden>
+                  組合提示詞
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m13 5 7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5Z"/></svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <aside class="output-shell" aria-labelledby="output-title">
+          <div class="output-heading">
+            <div>
+              <p class="panel-index">03 / Output</p>
+              <h2 id="output-title">組合結果</h2>
+            </div>
+            <span class="output-state" id="output-state"><span></span>等待輸入</span>
+          </div>
+          <div class="output-body">
+            <div class="output-placeholder" id="output-placeholder">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h8v2H8V3ZM5 6h14v15H5V6Zm2 2v11h10V8H7Zm2 2h6v2H9v-2Zm0 4h6v2H9v-2Z"/></svg>
+              <p>完成五個欄位後，提示詞會顯示在這裡。</p>
+            </div>
+            <pre id="prompt-output" tabindex="0" hidden><code></code></pre>
+          </div>
+          <div class="output-actions">
+            <button class="copy-button" id="copy-button" type="button" disabled>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 2h11v15h-3v5H5V7h3V2Zm2 5h6v8h1V4h-7v3Zm-3 2v11h7V9H7Z"/></svg>
+              <span>複製提示詞</span>
+            </button>
+            <button class="reset-button" id="reset-button" type="button">清除內容</button>
+          </div>
+          <p class="sr-only" id="app-status" role="status" aria-live="polite"></p>
+        </aside>
+      </section>
+
+      <section class="method-note" aria-labelledby="method-title">
+        <p class="eyebrow"><span>04</span> Why this works</p>
+        <div>
+          <h2 id="method-title">好的提示詞，先消除模型需要猜測的地方。</h2>
+          <p>Context 說明原因，Request 鎖定任務，Output Format 定義交付物，Constraints 收好邊界，Checkpoint 留下需要人類判斷的節點。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>感謝 <a href="https://x.com/RealCodedAlpha/status/2072937806801105347" target="_blank" rel="noopener noreferrer">RealCodedAlpha 的分享</a>，啟發了這套提示詞練習方法。</p>
+      <p>Prompt Forge <span aria-hidden="true">·</span> 所有內容僅在本機處理</p>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

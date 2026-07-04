@@ -1,0 +1,15 @@
+# Dependencies and tool caches
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+
+# Logs and local artifacts
+*.log
+.DS_Store
+coverage/
+
+# Local research records
+docs/knowledge-skill/
