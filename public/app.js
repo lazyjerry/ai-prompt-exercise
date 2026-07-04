@@ -1,9 +1,9 @@
 export const FIELD_DEFINITIONS = [
   { key: "context", label: "Context" },
   { key: "request", label: "Request" },
-  { key: "outputFormat", label: "Output Format" },
-  { key: "constraints", label: "Constraints" },
-  { key: "checkpoint", label: "Checkpoint" }
+  { key: "outputFormat", label: "交付格式" },
+  { key: "constraints", label: "限制條件" },
+  { key: "checkpoint", label: "停下確認條件" }
 ];
 
 export const PROMPT_EXAMPLES = {
@@ -38,13 +38,13 @@ export function buildPrompt(values) {
   return `${clean.context}
 ${clean.request}
 
-輸出格式：
+交付格式：
 ${clean.outputFormat}
 
-約束條件：
+限制條件：
 ${clean.constraints}
 
-查核條件：
+停下確認條件：
 ${clean.checkpoint}`;
 }
 

@@ -26,7 +26,7 @@
       <section class="hero" aria-labelledby="page-title">
         <p class="eyebrow"><span>01</span> Prompt workbench</p>
         <h1 id="page-title">把模糊需求，整理成<br><em>模型能執行</em>的提示詞。</h1>
-        <p class="hero-copy">依序釐清背景、任務、交付格式、約束與查核點。內容只在你的瀏覽器內處理，不會上傳。</p>
+        <p class="hero-copy">依序釐清背景、任務、交付格式、限制條件與停下確認條件。內容只在你的瀏覽器內處理，不會上傳。</p>
         <div class="hero-tags" aria-label="工具特色">
           <span>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H5v12h14V10h-2V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 0 1 6 0v3H9Zm-2 2h10v8H7v-8Z"/></svg>
@@ -99,7 +99,7 @@
                 <article class="field-card">
                   <div class="field-number">04</div>
                   <div class="field-copy">
-                    <label for="card-constraints">Constraints <span>約束</span></label>
+                    <label for="card-constraints">Constraints <span>限制條件</span></label>
                     <p id="card-constraints-hint">列出不能假設、不能更動或不能越界的條件。</p>
                   </div>
                   <textarea id="card-constraints" data-field="constraints" aria-describedby="card-constraints-hint card-constraints-error" placeholder="例：不要假設學員有程式背景；不使用付費工具。" rows="5"></textarea>
@@ -109,7 +109,7 @@
                 <article class="field-card">
                   <div class="field-number">05</div>
                   <div class="field-copy">
-                    <label for="card-checkpoint">Checkpoint <span>查核點</span></label>
+                    <label for="card-checkpoint">Checkpoint <span>停下確認條件</span></label>
                     <p id="card-checkpoint-hint">說明遇到哪些決策、風險或缺少資訊時，應先停下來詢問。</p>
                   </div>
                   <textarea id="card-checkpoint" data-field="checkpoint" aria-describedby="card-checkpoint-hint card-checkpoint-error" placeholder="例：若需要改變受眾或延長課程時間，先停下來詢問我。" rows="5"></textarea>
@@ -186,7 +186,7 @@
                 <p class="wizard-kicker">04 / Constraints</p>
                 <h3 id="wizard-constraints-title">哪些不能假設、不能越界</h3>
                 <p>列出不可變更的條件、禁止事項，以及模型不應自行補完的資訊。</p>
-                <label for="wizard-constraints">約束條件</label>
+                <label for="wizard-constraints">限制條件</label>
                 <textarea id="wizard-constraints" data-field="constraints" aria-describedby="wizard-constraints-error" placeholder="不要假設…" rows="8"></textarea>
                 <p class="field-error" id="wizard-constraints-error" data-error-for="constraints" aria-live="polite"></p>
               </section>
@@ -195,7 +195,7 @@
                 <p class="wizard-kicker">05 / Checkpoint</p>
                 <h3 id="wizard-checkpoint-title">什麼時候該停下來問你</h3>
                 <p>把需要你裁決的風險、範圍變更或缺少資訊寫清楚。</p>
-                <label for="wizard-checkpoint">查核條件</label>
+                <label for="wizard-checkpoint">停下確認條件</label>
                 <textarea id="wizard-checkpoint" data-field="checkpoint" aria-describedby="wizard-checkpoint-error" placeholder="只有遇到…才停下來詢問我。" rows="8"></textarea>
                 <p class="field-error" id="wizard-checkpoint-error" data-error-for="checkpoint" aria-live="polite"></p>
               </section>
