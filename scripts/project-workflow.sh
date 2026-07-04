@@ -1812,6 +1812,74 @@ task_plan.write_text(content)
 PY
 }
 
+complete_stage_five() {
+  cat > "$TASK_DIR/report.md" <<'EOF'
+# 建立提示詞練習 Cloudflare Pages：交付報告
+
+## 完成結果
+
+已完成可部署至 Cloudflare Pages 的 Prompt Forge 靜態網站，並推送至：
+
+- Repository：https://github.com/lazyjerry/ai-prompt-exercise
+- Branch：`main`
+
+## 需求對照
+
+| 需求 | 實作 | 驗證證據 |
+|---|---|---|
+| Context、Request、Output Format、Constraints、Checkpoint | 每種輸入模式各有完整五欄 | site contract test；瀏覽器 DOM 檢查 |
+| 自動組合指定格式 | `buildPrompt()` 使用固定標籤與空行 | prompt-builder test 精確比對全文 |
+| 卡片式輸入 | 同頁卡片網格表單 | 瀏覽器完成五欄輸入並產生結果 |
+| 精靈提示輸入 | 五步驟導覽、上一步／下一步 | 瀏覽器逐步驗證 1/5 至 5/5 |
+| 兩種方式切換 | ARIA tab 切換，共用單一 state | 切換後 wizard 保留 card 的 Context |
+| 靈感來源 | 頁尾感謝句與指定 X 連結 | site contract test |
+| Cloudflare Pages | `public/` output、`wrangler.jsonc`、`_headers` | Wrangler Pages dev 回傳 HTTP 200、No Functions |
+| `.gitignore` 與機密防護 | 排除 env、Wrangler、依賴與任務紀錄；CSP 阻止外連 | staged path 檢查、token pattern 掃描、response headers |
+| README 發布方法 | Git integration 與 Direct Upload 兩種流程 | `README.md` |
+| GitHub origin | `main` 推送指定 repository | GitHub default branch 與 remote SHA 核對 |
+
+## 驗證摘要
+
+- `npm test`：7/7 通過。
+- npm audit：0 個漏洞。
+- Browser console：0 個 error、0 個 warning。
+- 響應式：375、768、1024、1440 px 均無水平頁面捲動。
+- 可及性契約：所有 textarea 有 label、無重複 id、按鈕有名稱、主要互動目標至少 44px。
+- 安全標頭：CSP、Permissions Policy、Referrer Policy、`nosniff`、`DENY` frame policy 均由本機 Pages response 證實。
+- Git：本機 `main` 與 `origin/main` 同步。
+
+## 部署狀態
+
+程式碼與設定已具備 Cloudflare Pages 部署條件。此任務未建立 Cloudflare 帳號內的 Pages project；實際發布可依 `README.md` 選擇 Git integration 或 Wrangler Direct Upload。
+
+## 知識庫評估
+
+本次未建立公用知識檔。Pages 靜態部署與前端表單實作屬官方文件已涵蓋的標準作法；`KNOWLEDGE_BASE_DIR` 使用字面 `~` 的工具殘留屬一般 shell 路徑展開行為與本機環境設定，不另行沉澱。
+EOF
+
+  cat >> "$TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 6 次更新筆記 ---
+## 階段 5 結果
+- 已逐項核對功能、輸出格式、模式切換、靈感來源、Pages 設定、README、安全與 GitHub remote。
+- 已建立 `report.md`，區分 deploy-ready 實作與尚未在 Cloudflare 帳號內建立 Pages project 的外部狀態。
+- 本次無需建立公用知識檔：可重用部分均屬官方文件或一般 shell 行為。
+EOF
+
+  python3 - "$TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 5：完整性檢核與交付", "- [x] 階段 5：完整性檢核與交付")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("- [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "- [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 5** - 執行逐項完整性檢核與交付", "**已完成** - 全部需求、驗證、文件與 GitHub 發布均完成")
+task_plan.write_text(content)
+PY
+}
+
 case "${1:-}" in
   init)
     write_initial_task_files
@@ -1837,8 +1905,11 @@ case "${1:-}" in
   stage4)
     complete_stage_four
     ;;
+  stage5)
+    complete_stage_five
+    ;;
   *)
-    echo "Usage: $0 {init|stage1|site|stage2|stage3|readme|clean|stage4}" >&2
+    echo "Usage: $0 {init|stage1|site|stage2|stage3|readme|clean|stage4|stage5}" >&2
     exit 1
     ;;
 esac
