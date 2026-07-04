@@ -2816,7 +2816,7 @@ deploy_enhancement_cloudflare() {
   commit_message="$(git -C "$ROOT_DIR" log -1 --pretty=%s)"
   production_url="https://ai-prompt-exercise.pages.dev"
   temp_dir="$(mktemp -d)"
-  trap 'rm -rf "$temp_dir"' EXIT
+  trap "rm -rf '$temp_dir'" EXIT
 
   npm --prefix "$ROOT_DIR" test
   npm --prefix "$ROOT_DIR" run deploy -- \
@@ -2843,6 +2843,8 @@ deploy_enhancement_cloudflare() {
       cmp -s "$ROOT_DIR/public/app.js" "$temp_dir/app.js" &&
       cmp -s "$ROOT_DIR/public/styles.css" "$temp_dir/styles.css"; then
       echo "正式站驗證通過：$production_url"
+      rm -rf "$temp_dir"
+      trap - EXIT
       return 0
     fi
 
