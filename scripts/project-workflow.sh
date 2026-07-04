@@ -2805,6 +2805,7 @@ publish_enhancement_git() {
 }
 
 deploy_enhancement_cloudflare() {
+  local attempt
   local commit_hash
   local commit_message
   local temp_dir
@@ -2827,22 +2828,29 @@ deploy_enhancement_cloudflare() {
   "$ROOT_DIR/node_modules/.bin/wrangler" pages deployment list \
     --project-name ai-prompt-exercise
 
-  status_code="$(curl -fsS -o "$temp_dir/index.html" -w '%{http_code}' "$production_url/")"
-  [ "$status_code" = "200" ] || {
-    echo "錯誤：正式站回應狀態為 $status_code" >&2
-    exit 1
-  }
+  for attempt in 1 2 3 4 5 6 7 8 9 10; do
+    status_code="$(
+      curl -fsS -o "$temp_dir/index.html" -w '%{http_code}' "$production_url/" ||
+        true
+    )"
+    curl -fsS "$production_url/app.js" -o "$temp_dir/app.js" || true
+    curl -fsS "$production_url/styles.css" -o "$temp_dir/styles.css" || true
 
-  grep -q 'class="start-button"' "$temp_dir/index.html"
-  grep -q 'data-example="research"' "$temp_dir/index.html"
-  grep -q 'id="why-it-works"' "$temp_dir/index.html"
+    if [ "$status_code" = "200" ] &&
+      grep -q 'class="start-button"' "$temp_dir/index.html" &&
+      grep -q 'data-example="research"' "$temp_dir/index.html" &&
+      grep -q 'id="why-it-works"' "$temp_dir/index.html" &&
+      cmp -s "$ROOT_DIR/public/app.js" "$temp_dir/app.js" &&
+      cmp -s "$ROOT_DIR/public/styles.css" "$temp_dir/styles.css"; then
+      echo "正式站驗證通過：$production_url"
+      return 0
+    fi
 
-  curl -fsS "$production_url/app.js" -o "$temp_dir/app.js"
-  curl -fsS "$production_url/styles.css" -o "$temp_dir/styles.css"
-  cmp -s "$ROOT_DIR/public/app.js" "$temp_dir/app.js"
-  cmp -s "$ROOT_DIR/public/styles.css" "$temp_dir/styles.css"
+    [ "$attempt" -eq 10 ] || sleep 3
+  done
 
-  echo "正式站驗證通過：$production_url"
+  echo "錯誤：正式站未在等待時間內切換至最新內容" >&2
+  exit 1
 }
 
 complete_enhancement_delivery() {
