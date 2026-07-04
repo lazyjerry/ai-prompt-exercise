@@ -1,7 +1,31 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildPrompt, FIELD_DEFINITIONS, PROMPT_EXAMPLES } from "../public/app.js";
+import {
+  buildPrompt,
+  clearStoredValues,
+  FIELD_DEFINITIONS,
+  loadStoredValues,
+  PROMPT_EXAMPLES,
+  saveStoredValues,
+  STORAGE_KEY
+} from "../public/app.js";
+
+function createMemoryStorage(initial = {}) {
+  const store = { ...initial };
+  return {
+    getItem(key) {
+      return Object.hasOwn(store, key) ? store[key] : null;
+    },
+    setItem(key, value) {
+      store[key] = value;
+    },
+    removeItem(key) {
+      delete store[key];
+    },
+    store
+  };
+}
 
 test("提示詞包含五個固定欄位", () => {
   assert.deepEqual(
@@ -55,4 +79,24 @@ test("三個範例都提供完整五欄內容", () => {
       assert.ok(example[key].trim(), `${key} 不可為空`);
     }
   }
+});
+
+test("可儲存並讀取 localStorage 中的五欄內容", () => {
+  const storage = createMemoryStorage();
+  saveStoredValues({ context: "背景", request: "任務", outputFormat: "格式" }, storage);
+
+  assert.deepEqual(loadStoredValues(storage), {
+    context: "背景",
+    request: "任務",
+    outputFormat: "格式",
+    constraints: "",
+    checkpoint: ""
+  });
+});
+
+test("可清除 localStorage 中的暫存提示詞", () => {
+  const storage = createMemoryStorage({ [STORAGE_KEY]: JSON.stringify({ context: "背景" }) });
+  clearStoredValues(storage);
+
+  assert.equal(storage.getItem(STORAGE_KEY), null);
 });

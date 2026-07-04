@@ -28,6 +28,7 @@ html {
 }
 
 body {
+  zoom: 0.85;
   min-width: 320px;
   margin: 0;
   color: var(--text);
@@ -38,6 +39,15 @@ body {
     var(--bg);
   background-size: auto, 44px 44px, 44px 44px, auto;
   line-height: 1.6;
+}
+
+@supports not (zoom: 1) {
+  body {
+    width: calc(100% / 0.85);
+    min-height: calc(100vh / 0.85);
+    transform: scale(0.85);
+    transform-origin: top left;
+  }
 }
 
 button,
@@ -589,36 +599,74 @@ pre {
 
 .example-picker {
   margin-bottom: 1rem;
-  padding: 1rem;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface-soft);
 }
 
-.example-heading {
+.example-summary {
   display: flex;
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.85rem;
+  min-height: 56px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  list-style: none;
 }
 
-.example-heading .wizard-kicker {
+.example-summary::-webkit-details-marker {
+  display: none;
+}
+
+.example-summary .wizard-kicker {
   margin-bottom: 0.2rem;
 }
 
-.example-heading h3 {
+.example-summary h3 {
   margin: 0;
   font-size: 1rem;
   letter-spacing: -0.02em;
 }
 
-.example-heading > p {
+.example-summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.example-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.35rem 0.7rem;
+  color: var(--accent-ink);
+  border-radius: 999px;
+  background: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.example-toggle span:last-child,
+.example-picker[open] .example-toggle span:first-child {
+  display: none;
+}
+
+.example-picker[open] .example-toggle span:last-child {
+  display: inline;
+}
+
+.example-panel {
+  padding: 0 1rem 1rem;
+}
+
+.example-panel > p {
   max-width: 300px;
-  margin: 0;
+  margin: 0 0 0.85rem;
   color: var(--faint);
   font-size: 0.78rem;
-  text-align: right;
 }
 
 .example-grid {

@@ -22,6 +22,7 @@ test("精靈式是預設模式並提供三個範例", () => {
   assert.match(html, /id="card-tab"[^>]*aria-selected="false"/);
   assert.match(html, /id="card-panel"[^>]*hidden/);
   assert.doesNotMatch(html, /id="wizard-panel"[^>]*hidden/);
+  assert.match(html, /<details class="example-picker" id="example-picker">/);
   assert.equal((html.match(/data-example="/g) ?? []).length, 3);
 });
 

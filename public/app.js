@@ -6,6 +6,8 @@ export const FIELD_DEFINITIONS = [
   { key: "checkpoint", label: "停下確認條件" }
 ];
 
+export const STORAGE_KEY = "prompt-forge:values:v1";
+
 export const PROMPT_EXAMPLES = {
   research: {
     context: "我要為產品團隊整理近 12 個月的 AI Agent 安全實務，讀者具備基本技術背景，但沒有專職 AI 治理經驗。",
@@ -48,8 +50,46 @@ ${clean.constraints}
 ${clean.checkpoint}`;
 }
 
+export function normalizeStoredValues(values = {}) {
+  return Object.fromEntries(
+    FIELD_DEFINITIONS.map(({ key }) => [key, String(values[key] ?? "")])
+  );
+}
+
+export function loadStoredValues(storage = globalThis.localStorage) {
+  try {
+    const raw = storage?.getItem(STORAGE_KEY);
+    if (!raw) return normalizeStoredValues();
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return normalizeStoredValues();
+    }
+
+    return normalizeStoredValues(parsed);
+  } catch {
+    return normalizeStoredValues();
+  }
+}
+
+export function saveStoredValues(values, storage = globalThis.localStorage) {
+  try {
+    storage?.setItem(STORAGE_KEY, JSON.stringify(normalizeStoredValues(values)));
+  } catch {
+    // localStorage may be unavailable in private browsing or strict privacy modes.
+  }
+}
+
+export function clearStoredValues(storage = globalThis.localStorage) {
+  try {
+    storage?.removeItem(STORAGE_KEY);
+  } catch {
+    // localStorage may be unavailable in private browsing or strict privacy modes.
+  }
+}
+
 function initializeApp() {
-  const state = Object.fromEntries(FIELD_DEFINITIONS.map(({ key }) => [key, ""]));
+  const state = loadStoredValues();
   const modeTabs = [...document.querySelectorAll("[data-mode]")];
   const panels = {
     card: document.querySelector("#card-panel"),
@@ -71,6 +111,7 @@ function initializeApp() {
   const copyButton = document.querySelector("#copy-button");
   const resetButton = document.querySelector("#reset-button");
   const appStatus = document.querySelector("#app-status");
+  const examplePicker = document.querySelector("#example-picker");
   const exampleButtons = [...document.querySelectorAll("[data-example]")];
   let currentStep = 0;
   let activeMode = "wizard";
@@ -99,6 +140,7 @@ function initializeApp() {
     getInputsForField(key).forEach((input) => {
       if (input !== source) input.value = source.value;
     });
+    saveStoredValues(state);
     exampleButtons.forEach((button) => button.setAttribute("aria-pressed", "false"));
     if (source.value.trim()) clearFieldError(key);
   }
@@ -133,6 +175,7 @@ function initializeApp() {
       });
       clearFieldError(key);
     });
+    saveStoredValues(state);
 
     exampleButtons.forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset.example === exampleKey));
@@ -140,6 +183,7 @@ function initializeApp() {
     currentStep = 0;
     updateWizard();
     setMode("wizard", false);
+    examplePicker.open = false;
     appStatus.textContent = "範例已載入，可逐步修改。";
     document.querySelector("#wizard-context").focus();
   }
@@ -225,6 +269,7 @@ function initializeApp() {
       });
       clearFieldError(key);
     });
+    clearStoredValues();
     currentStep = 0;
     updateWizard();
     promptCode.textContent = "";
@@ -240,6 +285,12 @@ function initializeApp() {
 
   inputs.forEach((input) => {
     input.addEventListener("input", () => syncField(input));
+  });
+
+  FIELD_DEFINITIONS.forEach(({ key }) => {
+    getInputsForField(key).forEach((input) => {
+      input.value = state[key];
+    });
   });
 
   modeTabs.forEach((tab, index) => {

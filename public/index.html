@@ -124,32 +124,35 @@
           </div>
 
           <div id="wizard-panel" role="tabpanel" aria-labelledby="wizard-tab">
-            <section class="example-picker" aria-labelledby="example-title">
-              <div class="example-heading">
+            <details class="example-picker" id="example-picker">
+              <summary class="example-summary">
                 <div>
                   <p class="wizard-kicker">Quick start / 範例</p>
-                  <h3 id="example-title">先載入一個完整範例</h3>
+                  <h3 id="example-title">載入完整範例</h3>
                 </div>
+                <span class="example-toggle" aria-hidden="true"><span>展開</span><span>收合</span></span>
+              </summary>
+              <div class="example-panel" aria-labelledby="example-title">
                 <p>五個欄位會一次帶入，你仍可逐步修改。</p>
+                <div class="example-grid">
+                  <button class="example-card" type="button" data-example="research" aria-pressed="false">
+                    <span class="example-number">A</span>
+                    <strong>研究比較</strong>
+                    <span>整理近期資料、比較差異並標記來源</span>
+                  </button>
+                  <button class="example-card" type="button" data-example="development" aria-pressed="false">
+                    <span class="example-number">B</span>
+                    <strong>功能開發</strong>
+                    <span>限定修改範圍、測試與停下條件</span>
+                  </button>
+                  <button class="example-card" type="button" data-example="content" aria-pressed="false">
+                    <span class="example-number">C</span>
+                    <strong>內容企劃</strong>
+                    <span>指定受眾、篇幅、語氣與審核節點</span>
+                  </button>
+                </div>
               </div>
-              <div class="example-grid">
-                <button class="example-card" type="button" data-example="research" aria-pressed="false">
-                  <span class="example-number">A</span>
-                  <strong>研究比較</strong>
-                  <span>整理近期資料、比較差異並標記來源</span>
-                </button>
-                <button class="example-card" type="button" data-example="development" aria-pressed="false">
-                  <span class="example-number">B</span>
-                  <strong>功能開發</strong>
-                  <span>限定修改範圍、測試與停下條件</span>
-                </button>
-                <button class="example-card" type="button" data-example="content" aria-pressed="false">
-                  <span class="example-number">C</span>
-                  <strong>內容企劃</strong>
-                  <span>指定受眾、篇幅、語氣與審核節點</span>
-                </button>
-              </div>
-            </section>
+            </details>
             <div class="wizard-progress">
               <p id="wizard-progress-label">步驟 1 / 5</p>
               <div class="progress-track" aria-hidden="true"><span id="wizard-progress-bar"></span></div>
