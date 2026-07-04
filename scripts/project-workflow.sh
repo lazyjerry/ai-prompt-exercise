@@ -1775,6 +1775,43 @@ task_plan.write_text(content)
 PY
 }
 
+complete_stage_four() {
+  commit_hash=$(git -C "$ROOT_DIR" rev-parse --short HEAD)
+  cat >> "$TASK_DIR/notes.md" <<'EOF'
+
+---  2026-07-04  第 5 次更新筆記 ---
+## 階段 4 結果
+- 已建立 `README.md`，包含本機啟動、測試、Git integration 與 Wrangler Direct Upload 發布方法。
+- 已建立 `main` branch 與 `origin`：`https://github.com/lazyjerry/ai-prompt-exercise.git`。
+- 提交前已檢查 `.gitignore`、staged path、私鑰／token pattern、shell syntax、測試與 whitespace。
+- 已提交並推送 `origin/main`；最新提交為 COMMIT_HASH_PLACEHOLDER。
+- `docs/knowledge-skill/` 與誤建的字面 `~/` 工具殘留未進入 repository。
+EOF
+
+  python3 - "$TASK_DIR/notes.md" "$commit_hash" <<'PY'
+from pathlib import Path
+import sys
+
+notes = Path(sys.argv[1])
+content = notes.read_text()
+content = content.replace("COMMIT_HASH_PLACEHOLDER", sys.argv[2], 1)
+notes.write_text(content)
+PY
+
+  python3 - "$TASK_DIR/task_plan.md" <<'PY'
+from pathlib import Path
+import sys
+
+task_plan = Path(sys.argv[1])
+content = task_plan.read_text()
+content = content.replace("- [ ] 階段 4：建立 Git、README 並發布至 GitHub", "- [x] 階段 4：建立 Git、README 並發布至 GitHub")
+content = content.replace("  - [ ] 完成後更新 notes.md", "  - [x] 完成後更新 notes.md", 1)
+content = content.replace("- [ ] ✅ 階段檢核：更新 notes.md → task_plan.md", "- [x] ✅ 階段檢核：更新 notes.md → task_plan.md", 1)
+content = content.replace("**目前階段 4** - 建立 README、Git repository 並推送 GitHub", "**目前階段 5** - 執行逐項完整性檢核與交付")
+task_plan.write_text(content)
+PY
+}
+
 case "${1:-}" in
   init)
     write_initial_task_files
@@ -1797,8 +1834,11 @@ case "${1:-}" in
   clean)
     clean_local_artifacts
     ;;
+  stage4)
+    complete_stage_four
+    ;;
   *)
-    echo "Usage: $0 {init|stage1|site|stage2|stage3|readme|clean}" >&2
+    echo "Usage: $0 {init|stage1|site|stage2|stage3|readme|clean|stage4}" >&2
     exit 1
     ;;
 esac
