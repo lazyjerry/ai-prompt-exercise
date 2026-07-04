@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "wrangler pages dev public",
     "test": "node --test",
-    "deploy": "wrangler pages deploy public --project-name ai-prompt-exercise"
+    "deploy": "wrangler pages deploy public --project-name ai-prompt-exercise",
+    "release": "sh scripts/release.sh"
   },
   "devDependencies": {
     "wrangler": "4.107.0"

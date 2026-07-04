@@ -95,6 +95,14 @@ npx wrangler pages project create ai-prompt-exercise
 npm run deploy
 ```
 
+日常發布建議使用固定腳本，會先執行測試、確認工作樹乾淨、推送尚未推送的 `main` commit，再部署 Cloudflare Pages：
+
+```bash
+npm run release
+```
+
+可用環境變數調整 Pages project、branch 或發布目錄：`PROJECT_NAME`、`RELEASE_BRANCH`、`BUILD_DIR`。
+
 Cloudflare 的 Direct Upload project 建立後不能改成 Git integration。若要自動依 GitHub commit 發布，請一開始選擇方法一。
 
 ## 安全與隱私
